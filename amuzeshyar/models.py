@@ -10,7 +10,7 @@ class CharFiledLength:
 
 class ConstValue(models.Model):
     title = models.CharField(max_length=CharFiledLength.long_title)
-    parent = models.ForeignKey(to='ConstValue', on_delete=models.CASCADE)
+    parent = models.ForeignKey(to='ConstValue', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Person(models.Model):
@@ -57,7 +57,7 @@ class Room(models.Model):
 
 class Department(models.Model):
     title = models.CharField(max_length=CharFiledLength.short_title)
-    parent = models.ForeignKey(to="Department", on_delete=models.CASCADE)
+    parent = models.ForeignKey(to="Department", on_delete=models.CASCADE, null=True, blank=True)
     building = models.ForeignKey(
         Building, on_delete=models.SET_NULL, null=True)
 
