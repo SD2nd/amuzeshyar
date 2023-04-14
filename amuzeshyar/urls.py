@@ -1,6 +1,6 @@
 
 from django.urls import path
-
+from .apis import Person
 # config URL Configuration
 
 # The `urlpatterns` list routes URLs to views. For more information please see:
@@ -17,4 +17,6 @@ from django.urls import path
 #     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 
 app_name = "amuzeshyar"
-urlpatterns = []
+urlpatterns = [
+    path('api/v1/persons/', Person.as_view(), name= "post_person_information"),
+]
