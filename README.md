@@ -1,3 +1,4 @@
+![build on liara host](https://github.com/SD2nd/amuzeshyar/actions/workflows/liara.yaml/badge.svg)
 
 <div dir=”rtl”>
 
