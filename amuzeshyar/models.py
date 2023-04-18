@@ -241,8 +241,6 @@ class ClassSchedule(models.Model):
 
 class PhoneNumber(models.Model):
     number = models.CharField(max_length=15)
-    phone_number_type = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 

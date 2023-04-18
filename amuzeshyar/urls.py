@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .apis import Person
+from .apis import Person, register_student
 # config URL Configuration
 
 # The `urlpatterns` list routes URLs to views. For more information please see:
@@ -18,5 +18,13 @@ from .apis import Person
 
 app_name = "amuzeshyar"
 urlpatterns = [
+    path('api/v1/persons/<str:national_id>', Person.as_view(), name= "post_person_information"),
+    
     path('api/v1/persons/', Person.as_view(), name= "post_person_information"),
+    path('api/v1/student/', register_student, name= "full-info-person_information"),
+    
+    # path('api/v1/persons/<str:national_id>', get_by_national_id),
+    # path('api/v1/persons/<str:national_id>/del', del_person),
+    
+
 ]
