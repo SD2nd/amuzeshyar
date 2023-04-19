@@ -87,7 +87,7 @@ class Student(APIView):
     def get(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id', None)
         if student_id: 
-            student = StudentModel.objects.filter(student_id=student_id).first()
+            student = StudentModel.objects.filter(id=student_id).first()
             if student: 
                 serialized_data = StudentResponseSerializer(instance=student).data
                 return Response(
