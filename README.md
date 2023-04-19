@@ -97,7 +97,7 @@ Quit the server with CTRL-BREAK.
 2. آدرس هاست `may.iran.liara.ir`
 3. پورت هاست `31362`
 4. نام کاربری `root`
-5. [کلمه عبور(در صورتی که دسترسی ندارید، درخواست دهید)](https://drive.google.com/file/d/1nngP3dxnSP3Pdn8q25rMNvr8DCiP52zI/view?usp=share_link)
+5. [کلمه عبور(در صورتی که دسترسی ندارید، درخواست دهید)](https://drive.google.com/file/d/1JAJUFNVw8kao-vvVuzLku7wcj2ZMb2KB/view?usp=share_link)
 
 بعد از وارد کردن اطلاعات `test connection` را بزنید، در صورت موفقیت آمیز بودن `ok` را زده و وارد دیتابیس شوید.
 در غیر این صورت مجددا امتحان کنید
