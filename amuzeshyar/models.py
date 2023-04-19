@@ -104,8 +104,6 @@ class Student(models.Model):
         Semester, on_delete=models.SET_NULL, null=True)
     field_of_study = models.ForeignKey(
         Major, on_delete=models.SET_NULL, null=True)
-    student_id = models.CharField(
-        max_length=10, primary_key=True, db_column='student_id', db_index=True)
     graduation_date = models.DateField(null=True, blank=True)
 
 

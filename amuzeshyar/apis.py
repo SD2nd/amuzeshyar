@@ -2,8 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import PersonSerializer,EmailSerializer, PhoneNumberSerializer
+from .serializers import (
+    PersonSerializer,
+    EmailSerializer,
+    PhoneNumberSerializer,
+    StudentResponseSerializer, 
+    StudentRequestSerializer, 
+    AddressSerializer)
 from .models import Person as PersonModel
+from .models import Student as StudentModel
+
 
 
 # create your api here
@@ -75,4 +83,99 @@ def register_student(request):
     
     return Response({"msg": "Success"}, status=status.HTTP_201_CREATED)
     
+class Student(APIView):
+    def get(self, request, *args, **kwargs):
+        student_id = kwargs.get('student_id', None)
+        if student_id: 
+            student = StudentModel.objects.filter(student_id=student_id).first()
+            if student: 
+                serialized_data = StudentResponseSerializer(instance=student).data
+                return Response(
+                    {
+                    "msg":"success",
+                    "data":serialized_data
+                    },
+                    status=status.HTTP_200_OK
+                    )
+            return Response({"msg":"student not found"},status=status.HTTP_404_NOT_FOUND)
+        return Response({"msg":"student id is required"},status=status.HTTP_400_BAD_REQUEST)
+            
+
     
+    def post(self, request, *args, **kwargs):
+        payload = request.data
+        national_id = payload.get('national_id')
+        if payload and national_id:
+            emails = request.data.get('emails', [])
+            phone_numbers = request.data.get('phone_numbers',[])
+            addresses = request.data.get('addresses',[])
+            
+            # making emails, phone numbers, addresses objects
+            emails_data = [{"email": email, "person":national_id} for email in emails]
+            phone_numbers_data = [{"number": phone, "person": national_id} for phone in phone_numbers]
+            addresses_data = [{"address": address, "person": national_id} for address in addresses]
+            
+            person_ser = PersonSerializer(data=payload)
+            student_ser = StudentRequestSerializer(data=payload)
+            email_ser = EmailSerializer(data=emails_data, many=True)
+            phone_number_ser = PhoneNumberSerializer(data=phone_numbers_data, many=True)
+            address_ser = AddressSerializer(data=addresses_data, many=True)
+            
+            is_all_valid = all([
+                person_ser.is_valid(),
+                student_ser.is_valid(),
+                phone_number_ser.is_valid(),
+                address_ser.is_valid(),
+                email_ser.is_valid()
+            ])
+            if is_all_valid:
+                person_ser.save()
+                student_ser.save()
+                phone_number_ser.save()
+                address_ser.save()
+                email_ser.save()
+                
+                # preparing student data for response display
+                student = StudentModel.objects.filter(student_id=student_ser.student_id).first()
+                student_data = StudentResponseSerializer(student).data
+                return Response(
+                    {
+                    "msg":"success",
+                    "data": student_data
+                    },
+                    status=status.HTTP_201_CREATED
+                )
+            else: 
+                all_errors = []
+                if person_ser.errors: all_errors.append(person_ser.errors)
+                if student_ser.errors: all_errors.append(student_ser.errors)
+                if phone_number_ser.errors: all_errors.append(phone_number_ser.errors)
+                if address_ser.errors: all_errors.append(address_ser.errors)
+                if email_ser.errors: all_errors.append(email_ser.errors)
+                return Response(
+                    {
+                    "msg":"failure",
+                    "detail": all_errors
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                      
+        return Response(
+            {
+            "msg":"failure",
+            "detail": "payload is required"
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, *args, **kwargs):
+        pass
+    
+    def patch(self, request, *args, **kwargs):
+        pass
+    
+    def delete(self, request, *args, **kwargs):
+        pass
+    
+    @api_view(['GET'])
+    def get_students(request, *args, **kwargs):
+        pass

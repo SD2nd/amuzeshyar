@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'determined_noether',
+        'NAME': 'nifty_shaw',
         'USER': 'root',  
-        'PASSWORD': '7tU0c4OTle5TTPS87ETXSL5k',  
+        'PASSWORD': 'QLg6aDCHKs4VVgnzU0Et40Ce',  
         'HOST': 'may.iran.liara.ir',  
-        'PORT': '32544',  
+        'PORT': '31362',  
         'OPTIONS': {  
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
         }  
