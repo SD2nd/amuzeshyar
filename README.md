@@ -95,7 +95,7 @@ Quit the server with CTRL-BREAK.
 
 1. نام نمونه `amuzeshyar`
 2. آدرس هاست `may.iran.liara.ir`
-3. پورت هاست `32544`
+3. پورت هاست `31362`
 4. نام کاربری `root`
 5. [کلمه عبور(در صورتی که دسترسی ندارید، درخواست دهید)](https://drive.google.com/file/d/1nngP3dxnSP3Pdn8q25rMNvr8DCiP52zI/view?usp=share_link)
 
