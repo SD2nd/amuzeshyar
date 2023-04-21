@@ -93,11 +93,22 @@ Quit the server with CTRL-BREAK.
 
 پنجره باز شده اطلاعات اتصال به دیتابیس هاست را می خواهد 
 
-1. نام نمونه `amuzeshyar`
-2. آدرس هاست `may.iran.liara.ir`
-3. پورت هاست `31362`
-4. نام کاربری `root`
-5. [کلمه عبور(در صورتی که دسترسی ندارید، درخواست دهید)](https://drive.google.com/file/d/1JAJUFNVw8kao-vvVuzLku7wcj2ZMb2KB/view?usp=share_link)
+تنظیمات دیتابیس به شرح زیر است
+``` 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'nifty_shaw',
+        'USER': 'root',  
+        'PASSWORD': 'QLg6aDCHKs4VVgnzU0Et40Ce',  
+        'HOST': 'may.iran.liara.ir',  
+        'PORT': '31362',  
+        'OPTIONS': {  
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+        }  
+    }
+}
+```
 
 بعد از وارد کردن اطلاعات `test connection` را بزنید، در صورت موفقیت آمیز بودن `ok` را زده و وارد دیتابیس شوید.
 در غیر این صورت مجددا امتحان کنید
