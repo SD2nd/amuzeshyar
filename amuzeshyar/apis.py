@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
+from .models import ClassAttendance
+from .serializers import ClassAttendanceSerializer
 
 from amuzeshyar import serializers as ser
 from .models import Person as PersonModel
@@ -165,3 +168,44 @@ class Student(APIView):
     @api_view(['GET'])
     def get_students(request, *args, **kwargs):
         pass
+
+@api_view(['GET', 'POST'])
+def ClassAttendance_List(request):
+
+    if request.method == 'GET':
+    #get all the Attendances
+    #serialize them
+    #return json
+        classAttendances = ClassAttendance.objects.all()
+        serializer = ClassAttendanceSerializer(classAttendances, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == 'POST':
+        serializer = ClassAttendanceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def ClassAttendance_List_detail(request, id):
+    
+    try:
+        classAttendance = ClassAttendance.objects.get(pk=id)
+    except ClassAttendance.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)   
+
+    if request.method == 'GET':
+        serializer = ClassAttendanceSerializer(classAttendance)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = ClassAttendanceSerializer(classAttendance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        classAttendance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+

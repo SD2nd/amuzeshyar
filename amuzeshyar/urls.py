@@ -1,6 +1,7 @@
 
 from django.urls import path
-from .apis import Person, Student
+from .apis import Person, Student, ClassAttendance_List, ClassAttendance_List_detail
+
 # config URL Configuration
 
 # The `urlpatterns` list routes URLs to views. For more information please see:
@@ -27,6 +28,10 @@ urlpatterns = [
     path('api/v1/students', Student.get_students, name= "get_all_students"),
     path('api/v1/students/', Student.as_view(), name= "create_new_student"),
     path('api/v1/students/<int:student_id>', Student.as_view(), name= "edit_delete_student"),
+
+    #classAttendance
+    path('api/v1/classAttendances/', ClassAttendance_List, name="get_class_attenndanceList"),
+    path('api/v1/classAttendances/<int:id>', ClassAttendance_List_detail)
 
     
 

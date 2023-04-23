@@ -6,6 +6,7 @@ from .models import (
     PhoneNumber,
     Student,
     Address,
+    ClassAttendance,
 )
 
 
@@ -83,4 +84,9 @@ class StudentRequestSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
+        fields = "__all__"
+
+class ClassAttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassAttendance
         fields = "__all__"
