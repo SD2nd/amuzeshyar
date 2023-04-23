@@ -21,12 +21,12 @@ urlpatterns = [
     # person
     path('api/v1/persons', Person.all_persons, name= "all_persons"),
     path('api/v1/persons/', Person.as_view(), name= "create_person"),
-    path('api/v1/persons/<str:national_id>', Person.as_view(), name= "get_put_patch_person"),
+    path('api/v1/persons/<str:national_id>', Person.as_view(), name= "get_edit_delete_person"),
     
     # student
     path('api/v1/students', Student.get_students, name= "get_all_students"),
     path('api/v1/students/', Student.as_view(), name= "create_new_student"),
-    path('api/v1/students/<int:student_id>', Student.as_view(), name= "edit_delete_student"),
+    path('api/v1/students/<int:student_id>', Student.as_view(), name= "get_edit_delete_student"),
 
     
 
