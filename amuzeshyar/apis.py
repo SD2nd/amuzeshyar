@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-from .models import ClassAttendance
-from .serializers import ClassAttendanceSerializer
+from .models import ClassAttendance, StudentClass
+from .serializers import ClassAttendanceSerializer, StudentClassSerializer
 
 from amuzeshyar import serializers as ser
 from .models import Person as PersonModel
@@ -185,6 +185,7 @@ def ClassAttendance_List(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def ClassAttendance_List_detail(request, id):
@@ -209,3 +210,42 @@ def ClassAttendance_List_detail(request, id):
         classAttendance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET', 'POST'])
+def StudentClass_list(request):
+
+    if request.method == 'GET':
+        studentClass = StudentClass.objects.all()
+        serializer = StudentClassSerializer(studentClass, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    
+    if request.method == 'POST':
+        serializer = StudentClassSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def StudentClass_List_detail(request, id):
+    
+    try:
+        studentClass = StudentClass.objects.get(pk=id)
+    except StudentClass.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)   
+
+    if request.method == 'GET':
+        serializer = StudentClassSerializer(studentClass)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = StudentClassSerializer(studentClass, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        studentClass.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
