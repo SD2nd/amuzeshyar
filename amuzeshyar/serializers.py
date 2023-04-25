@@ -8,6 +8,7 @@ from .models import (
     Address,
     ClassAttendance,
     StudentClass,
+    Course,
 )
 
 
@@ -95,4 +96,9 @@ class ClassAttendanceSerializer(serializers.ModelSerializer):
 class StudentClassSerializer(serializers.ModelSerializer): 
     class Meta:
         model = StudentClass
+        fields = "__all__"    
+
+class CourseSerializer(serializers.ModelSerializer): 
+    class Meta:
+        model = Course
         fields = "__all__"    

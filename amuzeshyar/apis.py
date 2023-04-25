@@ -10,6 +10,7 @@ from .serializers import ClassAttendanceSerializer, StudentClassSerializer
 from amuzeshyar import serializers as ser
 from .models import Person as PersonModel
 from .models import Student as StudentModel
+from .models import Course as CourseModel
 
 
 class Person(APIView):
@@ -249,3 +250,21 @@ def StudentClass_List_detail(request, id):
     if request.method == 'DELETE':
         studentClass.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+class Course_list(APIView):
+    def post(self, request):
+        data = request.data
+        if data:
+            serialized = ser.CourseSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        try:
+            queryset = CourseModel.objects.all()
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = ser.CourseSerializer(queryset,many=True)
+        return Response(serialized.data, status.HTTP_200_OK)
