@@ -271,3 +271,64 @@ class Course_list(APIView):
             return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
         serialized = s.CourseSerializer(queryset, many=True)
         return Response(serialized.data, status.HTTP_200_OK)
+
+
+class Building(APIView):
+    def get(self, request):
+        qs = m.Building.objects.all()
+        serialized = s.BuildingSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+    def post(self, request):
+        serializer = s.BuildingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Room(APIView):
+    def get(self, request):
+        qs = m.Room.objects.all()
+        serialized = s.RoomSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+    def post(self, request):
+        serializer = s.RoomSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class Department(APIView):
+    def get(self, request):
+        qs = m.Department.objects.all()
+        serialized = s.DepartmentSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+    def post(self, request):
+        serializer = s.DepartmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ConstValue(APIView):
+    def get(self, request):
+        qs = m.ConstValue.objects.all()
+        serialized = s.ConstValueSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+    def post(self, request):
+        serializer = s.ConstValueSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

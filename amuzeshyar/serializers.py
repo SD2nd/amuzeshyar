@@ -92,3 +92,22 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Course
         fields = "__all__"    
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.Room
+        fields = "__all__"
+
+class BuildingSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = m.Building
+        fields = "__all__"
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= m.Department
+        fields = "__all__"
+class ConstValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.ConstValue
+        fields = "__all__"
