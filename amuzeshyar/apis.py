@@ -4,20 +4,18 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-from .models import ClassAttendance, StudentClass
-from .serializers import ClassAttendanceSerializer, StudentClassSerializer
 
-from amuzeshyar import serializers as ser
-from .models import Person as PersonModel
-from .models import Student as StudentModel
-from .models import Course as CourseModel
+from amuzeshyar import (
+    serializers as s,
+    models as m
+)
 
 
 class Person(APIView):
     def post(self, request):
         data = request.data
         if data:
-            serialized = ser.PersonRequestSerializer(data=data)
+            serialized = s.PersonRequestSerializer(data=data)
             if serialized.is_valid():
                 serialized.save()
                 return Response(serialized.data, status.HTTP_201_CREATED)
@@ -26,14 +24,14 @@ class Person(APIView):
 
     def get(self, request, national_id):
         try:
-            queryset = PersonModel.objects.get(national_id=national_id)
+            queryset = m.Person.objects.get(national_id=national_id)
         except ObjectDoesNotExist:
             return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
-        serialized = ser.PersonResponseSerializer(queryset)
+        serialized = s.PersonResponseSerializer(queryset)
         return Response(serialized.data, status.HTTP_200_OK)
 
     def delete(self, request, national_id):
-        qs = PersonModel.objects.filter(national_id=national_id).first()
+        qs = m.Person.objects.filter(national_id=national_id).first()
         if qs:
             qs.delete()
             return Response({"msg": "deleted"}, status.HTTP_200_OK)
@@ -50,8 +48,8 @@ class Person(APIView):
 
     @api_view(['GET'])
     def all_persons(request):
-        persons_qs = PersonModel.objects.all()
-        serialized_data = ser.PersonResponseSerializer(
+        persons_qs = m.Person.objects.all()
+        serialized_data = s.PersonResponseSerializer(
             persons_qs, many=True).data
         return Response(serialized_data, status.HTTP_200_OK)
 
@@ -60,9 +58,9 @@ class Student(APIView):
     def get(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id', None)
         if student_id:
-            student = StudentModel.objects.filter(id=student_id).first()
+            student = m.Student.objects.filter(id=student_id).first()
             if student:
-                serialized_data = ser.StudentResponseSerializer(
+                serialized_data = s.StudentResponseSerializer(
                     instance=student).data
                 return Response(
                     {
@@ -90,7 +88,7 @@ class Student(APIView):
             addresses_data = [{"address": address,
                                "person": national_id} for address in addresses]
 
-            person_ser = ser.PersonRequestSerializer(data=payload)
+            person_ser = s.PersonRequestSerializer(data=payload)
             if person_ser.is_valid():
                 person_ser.save()
                 payload['person'] = national_id
@@ -103,11 +101,11 @@ class Student(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            student_ser = ser.StudentRequestSerializer(data=payload)
-            email_ser = ser.EmailSerializer(data=emails_data, many=True)
-            phone_number_ser = ser.PhoneNumberSerializer(
+            student_ser = s.StudentRequestSerializer(data=payload)
+            email_ser = s.EmailSerializer(data=emails_data, many=True)
+            phone_number_ser = s.PhoneNumberSerializer(
                 data=phone_numbers_data, many=True)
-            address_ser = ser.AddressSerializer(data=addresses_data, many=True)
+            address_ser = s.AddressSerializer(data=addresses_data, many=True)
 
             is_all_valid = all([
                 student_ser.is_valid(),
@@ -122,9 +120,9 @@ class Student(APIView):
                 email_ser.save()
 
                 # preparing student data for response display
-                student = StudentModel.objects.filter(
+                student = m.Student.objects.filter(
                     id=student_ser.data.get('id')).first()
-                student_data = ser.StudentResponseSerializer(student).data
+                student_data = s.StudentResponseSerializer(student).data
                 return Response(
                     {
                         "msg": "success",
@@ -134,7 +132,7 @@ class Student(APIView):
                 )
             else:
 
-                PersonModel.objects.get(national_id=national_id).delete()
+                m.Person.objects.get(national_id=national_id).delete()
                 all_errors = {
                     "StudentInfo": student_ser.errors,
                     "Emails": email_ser.errors,
@@ -170,38 +168,41 @@ class Student(APIView):
     def get_students(request, *args, **kwargs):
         pass
 
+
 @api_view(['GET', 'POST'])
 def ClassAttendance_List(request):
 
     if request.method == 'GET':
-    #get all the Attendances
-    #serialize them
-    #return json
-        classAttendances = ClassAttendance.objects.all()
-        serializer = ClassAttendanceSerializer(classAttendances, many=True)
+        # get all the Attendances
+        # serialize them
+        # return json
+        classAttendances = m.ClassAttendance.objects.all()
+        serializer = s.ClassAttendanceSerializer(classAttendances, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     if request.method == 'POST':
-        serializer = ClassAttendanceSerializer(data=request.data)
+        serializer = s.ClassAttendanceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def ClassAttendance_List_detail(request, id):
-    
+
     try:
-        classAttendance = ClassAttendance.objects.get(pk=id)
-    except ClassAttendance.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)   
+        classAttendance = m.ClassAttendance.objects.get(pk=id)
+    except m.ClassAttendance.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ClassAttendanceSerializer(classAttendance)
+        serializer = s.ClassAttendanceSerializer(classAttendance)
         return Response(serializer.data)
 
     if request.method == 'PUT':
-        serializer = ClassAttendanceSerializer(classAttendance, data=request.data)
+        serializer = s.ClassAttendanceSerializer(
+            classAttendance, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -216,32 +217,32 @@ def ClassAttendance_List_detail(request, id):
 def StudentClass_list(request):
 
     if request.method == 'GET':
-        studentClass = StudentClass.objects.all()
-        serializer = StudentClassSerializer(studentClass, many=True)
+        studentClass = m.StudentClass.objects.all()
+        serializer = s.StudentClassSerializer(studentClass, many=True)
         return JsonResponse(serializer.data, safe=False)
-    
+
     if request.method == 'POST':
-        serializer = StudentClassSerializer(data=request.data)
+        serializer = s.StudentClassSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def StudentClass_List_detail(request, id):
-    
+
     try:
-        studentClass = StudentClass.objects.get(pk=id)
-    except StudentClass.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)   
+        studentClass = m.StudentClass.objects.get(pk=id)
+    except m.StudentClass.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = StudentClassSerializer(studentClass)
+        serializer = s.StudentClassSerializer(studentClass)
         return Response(serializer.data)
 
     if request.method == 'PUT':
-        serializer = StudentClassSerializer(studentClass, data=request.data)
+        serializer = s.StudentClassSerializer(studentClass, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -250,11 +251,13 @@ def StudentClass_List_detail(request, id):
     if request.method == 'DELETE':
         studentClass.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class Course_list(APIView):
     def post(self, request):
         data = request.data
         if data:
-            serialized = ser.CourseSerializer(data=data)
+            serialized = s.CourseSerializer(data=data)
             if serialized.is_valid():
                 serialized.save()
                 return Response(serialized.data, status.HTTP_201_CREATED)
@@ -263,8 +266,8 @@ class Course_list(APIView):
 
     def get(self, request):
         try:
-            queryset = CourseModel.objects.all()
+            queryset = m.Course.objects.all()
         except ObjectDoesNotExist:
             return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
-        serialized = ser.CourseSerializer(queryset,many=True)
+        serialized = s.CourseSerializer(queryset, many=True)
         return Response(serialized.data, status.HTTP_200_OK)

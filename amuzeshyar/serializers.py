@@ -1,23 +1,13 @@
 from rest_framework import serializers
 
-from .models import (
-    Person,
-    Email,
-    PhoneNumber,
-    Student,
-    Address,
-    ClassAttendance,
-    StudentClass,
-    Course,
-)
-
+from amuzeshyar import models as m
 
 class PersonResponseSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
 
     class Meta:
-        model = Person
+        model = m.Person
         fields = "__all__"
 
     def get_role(self, obj):
@@ -28,17 +18,17 @@ class PersonResponseSerializer(serializers.ModelSerializer):
 
 class PersonRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Person
+        model = m.Person
         fields = "__all__"
 class EmailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Email
+        model = m.Email
         fields = "__all__"
 
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PhoneNumber
+        model = m.PhoneNumber
         fields = "__all__"
 
 
@@ -51,7 +41,7 @@ class StudentResponseSerializer(serializers.ModelSerializer):
     addresses = serializers.SerializerMethodField()
 
     class Meta:
-        model = Student
+        model = m.Student
         fields = "__all__"
         extra_fields = ["email", "addresses", "phone_numbers"]
 
@@ -65,40 +55,40 @@ class StudentResponseSerializer(serializers.ModelSerializer):
         return obj.graduation_date if obj.graduation_date else "نامشخص"
 
     def get_addresses(self, obj):
-        all_addresses = Address.objects.filter(person=obj.person)
+        all_addresses = m.Address.objects.filter(person=obj.person)
         return [address.address for address in all_addresses]
 
     def get_emails(self, obj):
-        all_emails = Email.objects.filter(person_id=obj.person_id)
+        all_emails = m.Email.objects.filter(person_id=obj.person_id)
         return [email.email for email in all_emails]
 
     def get_phone_numbers(self, obj):
-        all_numbers = PhoneNumber.objects.filter(person_id=obj.person_id)
+        all_numbers = m.PhoneNumber.objects.filter(person_id=obj.person_id)
         return [phone.number for phone in all_numbers]
 
 
 class StudentRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Student
+        model = m.Student
         fields = "__all__"
 
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Address
+        model = m.Address
         fields = "__all__"
 
 class ClassAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ClassAttendance
+        model = m.ClassAttendance
         fields = "__all__"
 
 class StudentClassSerializer(serializers.ModelSerializer): 
     class Meta:
-        model = StudentClass
+        model = m.StudentClass
         fields = "__all__"    
 
 class CourseSerializer(serializers.ModelSerializer): 
     class Meta:
-        model = Course
+        model = m.Course
         fields = "__all__"    
