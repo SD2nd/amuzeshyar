@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from amuzeshyar import (
     serializers as s,
@@ -334,3 +335,22 @@ class ConstValue(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RegisterUser(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = s.UserRegistrationSerializer
+    
+@permission_classes([AllowAny])
+@api_view(['PUT'])
+def reset_user_password(request):
+    if request.data: 
+        email = request.data['email']
+        try: 
+            obj = User.objects.get(email=email)
+            obj.set_password(request.data['password'])
+            obj.save()
+            return Response({},204 )
+        except User.DoesNotExist:
+            return Response({"msg":"Not Found"}, 404)
+    return Response({"msg":"payload required"}, 400)

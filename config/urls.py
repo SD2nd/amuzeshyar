@@ -21,10 +21,15 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from amuzeshyar import apis
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('edu/api/v1/', include("amuzeshyar.urls")),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/register/', apis.RegisterUser.as_view(), name="user_registration"),
+    path('api/password/reset/', apis.reset_user_password, name="reset-password" )
 
 ]
