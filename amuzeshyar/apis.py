@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 
+
 from amuzeshyar import (
     serializers as s,
     models as m
@@ -161,8 +162,24 @@ class Student(APIView):
     def patch(self, request, *args, **kwargs):
         pass
 
+
     def delete(self, request, *args, **kwargs):
-        pass
+        student_id = kwargs.get('student_id', None)
+        if student_id:
+            student = m.Student.objects.filter(id=student_id).first()
+            person=student.person
+            if student:
+                # Delete related objects first
+                m.Email.objects.filter(person=person).delete()
+                m.PhoneNumber.objects.filter(person=person).delete()
+                m.Address.objects.filter(person=person).delete()
+
+                # Delete the student object
+                student.delete()
+                return Response({"msg": "Success"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"msg": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"msg": "Student id is required"}, status=status.HTTP_400_BAD_REQUEST)({"msg": "student id is required"}, status=status.HTTP_400_BAD_REQUEST)
+       
 
     @api_view(['GET'])
     def get_students(request, *args, **kwargs):
