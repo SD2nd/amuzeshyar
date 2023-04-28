@@ -1,7 +1,7 @@
 name: CD-Liara
 on:
   push:
-    branches: [main]
+    branches: [authentication]
 jobs:
   deploy:
     runs-on: ubuntu-latest
