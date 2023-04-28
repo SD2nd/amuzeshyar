@@ -4,7 +4,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-
+from .models import PhoneNumber as PhoneNumberModel
+from .models import Address as AddressModel
+from .models import Email as EmailModel
+from .models import Person as PersonModel
+from .serializers import PersonSerializer, AddressSerializer, EmailSerializer,PhoneNumberSerializer
 from amuzeshyar import (
     serializers as s,
     models as m
@@ -156,13 +160,58 @@ class Student(APIView):
             status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
-        pass
+        national_id = request.data.get('national_id')
+        if national_id:
+            person = PersonModel.objects.filter(national_id=national_id).first()
+            if person:
+                # Update person data
+                person_serializer = PersonSerializer(person, data=request.data)
+                if person_serializer.is_valid():
+                    person_serializer.save()
+
+                # Update related objects
+                email_data = request.data.get('emails', [])
+                email_instances = EmailModel.objects.filter(person=person)
+                email_serializer = EmailSerializer(email_instances, data=email_data, many=True)
+                if email_serializer.is_valid():
+                    email_serializer.save()
+
+                phone_data = request.data.get('phone_numbers', [])
+                phone_instances = PhoneNumberModel.objects.filter(person=person)
+                phone_serializer = PhoneNumberSerializer(phone_instances, data=phone_data, many=True)
+                if phone_serializer.is_valid():
+                    phone_serializer.save()
+
+                address_data = request.data.get('addresses', [])
+                address_instances = AddressModel.objects.filter(person=person)
+                address_serializer = AddressSerializer(address_instances, data=address_data, many=True)
+                if address_serializer.is_valid():
+                    address_serializer.save()
+
+                return Response({"msg": "Success"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"msg": "Failure", "detail": "Person not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"msg": "Failure", "detail": "National ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, *args, **kwargs):
         pass
 
     def delete(self, request, *args, **kwargs):
-        pass
+        national_id = kwargs.get('national_id', None)
+        person = PersonModel.objects.filter(national_id=national_id).first()
+        if person:
+            # Delete related objects first
+            EmailModel.objects.filter(person=person).delete()
+            PhoneNumberModel.objects.filter(person=person).delete()
+            AddressModel.objects.filter(person=person).delete()
+
+            # Delete the person object
+            person.delete()
+            return Response({"msg": "Success"}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"msg": "Failure", "detail": "Person not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
     @api_view(['GET'])
     def get_students(request, *args, **kwargs):
