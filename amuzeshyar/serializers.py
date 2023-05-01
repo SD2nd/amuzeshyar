@@ -129,5 +129,18 @@ class StudentInvoiceSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 
-    
-    
+class Semester(serializers.ModelSerializer):
+    class Meta:
+        model = m.Semester
+        fields = "__all__"
+        
+class Class(serializers.ModelSerializer):
+    class Meta:
+        model = m.Class
+        fields = "__all__"
+        
+class ClassSchedule(serializers.ModelSerializer):
+    class Meta:
+        model = m.ClassSchedule
+        fields = "__all__"
+        
