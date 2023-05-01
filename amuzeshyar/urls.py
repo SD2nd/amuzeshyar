@@ -67,5 +67,10 @@ urlpatterns = [
     #constvalues
     path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
     path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
-    
+
+    #Semester
+    path('coursetuitions', a.Semester.Semester_List_detail),
+    path('coursetuitions/', a.Semester.as_view()),
+    path('coursetuitions/<int:id>', a.Semester.as_view()),
+
 ]
