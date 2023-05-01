@@ -349,3 +349,72 @@ class ConstValue(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class FixedTuitionFee(APIView):
+    def get(self, request, id):
+        qs = m.FixedTuitionFee.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.FixedTuitionFeeSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.FixedTuitionFeeSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def FixedTuitionFee_List_detail(request):
+        qs = m.FixedTuitionFee.objects.all()
+        serialized = s.FixedTuitionFeeSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+class SemesterCourseTuition(APIView):
+    def get(self, request, id):
+        qs = m.SemesterCourseTuition.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.SemesterCourseTuitionSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.SemesterCourseTuitionSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def SemesterCourseTuition_List_detail(request):
+        qs = m.SemesterCourseTuition.objects.all()
+        serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+class StudentInvoice(APIView):
+    def get(self, request, id):
+        qs = m.StudentInvoice.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.StudentInvoiceSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.StudentInvoiceSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def StudentInvoice_List_detail(request):
+        qs = m.StudentInvoice.objects.all()
+        serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
+        return Response(serialized.data, 200)

@@ -51,4 +51,20 @@ urlpatterns = [
     
     #ConstValue    
     path('constvalues/', a.ConstValue.as_view()),
+
+    #FixedTuitionFee
+    path('fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
+    path('fixedfees/', a.FixedTuitionFee.as_view()),
+    path('fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
+
+    #SemesterCourseTuition
+    path('coursetuitions', a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
+    path('coursetuitions/', a.SemesterCourseTuition.as_view()),
+    path('coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
+
+    #StudentInvoice
+    path('invoices', a.StudentInvoice.StudentInvoice_List_detail),
+    path('invoices/', a.StudentInvoice.as_view()),
+    path('invoices/<int:id>', a.StudentInvoice.as_view()),
+
 ]

@@ -111,3 +111,15 @@ class ConstValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.ConstValue
         fields = "__all__"
+class FixedTuitionFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.FixedTuitionFee
+        fields = "__all__"
+class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.SemesterCourseTuition
+        fields = "__all__"
+class StudentInvoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.SemesterCourseTuition
+        fields = "__all__"
