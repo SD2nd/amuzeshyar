@@ -19,14 +19,12 @@ from amuzeshyar import apis as a
 app_name = "amuzeshyar"
 urlpatterns = [
     # person
-    path('persons', a.Person.all_persons, name= "all_persons"),
-    path('persons/', a.Person.as_view(), name= "create_person"),
-    path('persons/<str:national_id>', a.Person.as_view(), name= "get_edit_delete_person"),
+    path('persons/', a.PersonList.as_view(), name= "create_list_all_person"),
+    path('persons/<str:national_id>', a.PersonDetail.as_view(), name= "get_edit_delete_person"),
     
     # student
-    path('students', a.Student.get_students, name= "get_all_students"),
-    path('students/', a.Student.as_view(), name= "create_new_student"),
-    path('students/<int:student_id>', a.Student.as_view(), name= "get_edit_delete_student"),
+    path('students/', a.StudentList.as_view(), name= "create_list_all_student"),
+    path('students/<int:student_id>', a.StudentDetail.as_view(), name= "get_edit_delete_student"),
 
     #classAttendance
     path('classAttendances/', a.ClassAttendance_List, name="get_class_attenndanceList"),
@@ -47,10 +45,9 @@ urlpatterns = [
     path('rooms/', a.Room.as_view()),
 
     #Department
-    path('departments/', a.Department.as_view()),
+    path('departments/', a.DepartmentList.as_view()),
+    path('departments/<int:pk>', a.DepartmentDetail.as_view()),
     
-    #ConstValue    
-    path('constvalues/', a.ConstValue.as_view()),
 
     #FixedTuitionFee
     path('fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
@@ -67,4 +64,8 @@ urlpatterns = [
     path('invoices/', a.StudentInvoice.as_view()),
     path('invoices/<int:id>', a.StudentInvoice.as_view()),
 
+    #constvalues
+    path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
+    path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
+    
 ]

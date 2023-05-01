@@ -41,6 +41,8 @@ class Building(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+    def __str__(self) -> str:
+        return self.title
 
 
 class Room(models.Model):
@@ -61,6 +63,8 @@ class Department(models.Model):
     building = models.ForeignKey(
         Building, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self) -> str:
+        return self.title
 
 class Professor(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)

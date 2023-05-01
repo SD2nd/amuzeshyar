@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from drf_spectacular.utils import extend_schema
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 
@@ -12,7 +14,30 @@ from amuzeshyar import (
 )
 
 
-class Person(APIView):
+@extend_schema(
+    tags=["Person"]
+)
+class PersonList(APIView):
+    @extend_schema(
+        summary="HAYA",
+        request=None,
+        responses={
+            200: s.PersonResponseSerializer
+        },
+
+    )
+    def get(self, request):
+        persons_qs = m.Person.objects.all()
+        serialized_data = s.PersonResponseSerializer(
+            persons_qs, many=True).data
+        return Response(serialized_data, status.HTTP_200_OK)
+
+    @extend_schema(
+        request=s.PersonRequestSerializer,
+        responses={
+            201: s.PersonRequestSerializer
+        },
+    )
     def post(self, request):
         data = request.data
         if data:
@@ -23,6 +48,16 @@ class Person(APIView):
             return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
         return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(tags=["Person"])
+class PersonDetail(APIView):
+
+    @extend_schema(
+        request=None,
+        responses={
+            200: s.PersonResponseSerializer,
+        }
+    )
     def get(self, request, national_id):
         try:
             queryset = m.Person.objects.get(national_id=national_id)
@@ -39,41 +74,27 @@ class Person(APIView):
         return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
 
     def put(self, request, national_id):
-        pass
+        return Response(status=501)
 
     def patch(self, request, national_id):
-        pass
+        return Response(status=501)
 
     def delete(self, request, national_id):
-        pass
-
-    @api_view(['GET'])
-    def all_persons(request):
-        persons_qs = m.Person.objects.all()
-        serialized_data = s.PersonResponseSerializer(
-            persons_qs, many=True).data
-        return Response(serialized_data, status.HTTP_200_OK)
+        return Response(status=501)
 
 
-class Student(APIView):
-    def get(self, request, *args, **kwargs):
-        student_id = kwargs.get('student_id', None)
-        if student_id:
-            student = m.Student.objects.filter(id=student_id).first()
-            if student:
-                serialized_data = s.StudentResponseSerializer(
-                    instance=student).data
-                return Response(
-                    {
-                        "msg": "success",
-                        "data": serialized_data
-                    },
-                    status=status.HTTP_200_OK
-                )
-            return Response({"msg": "student not found"}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"msg": "student id is required"}, status=status.HTTP_400_BAD_REQUEST)
+@extend_schema(tags=["Student"])
+class StudentList(APIView):
+    def get(self, request):
+        return Response(status=501)
 
-    def post(self, request, *args, **kwargs):
+    @extend_schema(
+        request=s.StudentRequestSerializer,
+        responses={
+            200: s.StudentResponseSerializer,
+        }
+    )
+    def post(self, request):
         payload = request.data
         national_id = payload.get('national_id')
         if payload and national_id:
@@ -156,18 +177,43 @@ class Student(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(tags=["Student"])
+class StudentDetail(APIView):
+    @extend_schema(
+        request=None,
+        responses={
+            200: s.StudentResponseSerializer
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        student_id = kwargs.get('student_id', None)
+        if student_id:
+            student = m.Student.objects.filter(id=student_id).first()
+            if student:
+                serialized_data = s.StudentResponseSerializer(
+                    instance=student).data
+                return Response(
+                    {
+                        "msg": "success",
+                        "data": serialized_data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            return Response({"msg": "student not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"msg": "student id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
     def put(self, request, *args, **kwargs):
-        pass
+        return Response(status=501)
 
     def patch(self, request, *args, **kwargs):
-        pass
-
+        return Response(status=501)
 
     def delete(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id', None)
         if student_id:
             student = m.Student.objects.filter(id=student_id).first()
-            person=student.person
+            person = student.person
             if student:
                 # Delete related objects first
                 m.Email.objects.filter(person=person).delete()
@@ -179,13 +225,19 @@ class Student(APIView):
                 return Response({"msg": "Success"}, status=status.HTTP_204_NO_CONTENT)
             return Response({"msg": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response({"msg": "Student id is required"}, status=status.HTTP_400_BAD_REQUEST)({"msg": "student id is required"}, status=status.HTTP_400_BAD_REQUEST)
-       
 
     @api_view(['GET'])
     def get_students(request, *args, **kwargs):
-        pass
+        return Response(status=501)
 
 
+@extend_schema(
+    request=s.ClassAttendanceSerializer,
+    responses={
+        status.HTTP_200_OK: s.ClassAttendanceSerializer(many=True),
+    },
+    summary="List or create ClassAttendances",
+    tags=["Class Attendance",])
 @api_view(['GET', 'POST'])
 def ClassAttendance_List(request):
 
@@ -205,6 +257,14 @@ def ClassAttendance_List(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+
+    request=s.ClassAttendanceSerializer,
+    responses={
+        status.HTTP_200_OK: s.ClassAttendanceSerializer,
+    },
+
+    tags=["Class Attendance",])
 @api_view(['GET', 'PUT', 'DELETE'])
 def ClassAttendance_List_detail(request, id):
 
@@ -230,6 +290,12 @@ def ClassAttendance_List_detail(request, id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(
+    request=s.StudentClassSerializer,
+    responses={
+        status.HTTP_200_OK: s.StudentClassSerializer(),
+    },
+    tags=["Class Registration"])
 @api_view(['GET', 'POST'])
 def StudentClass_list(request):
 
@@ -246,6 +312,12 @@ def StudentClass_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    request=s.StudentClassSerializer,
+    responses={
+        status.HTTP_200_OK: s.StudentClassSerializer,
+    },
+    tags=["Class Registration"])
 @api_view(['GET', 'PUT', 'DELETE'])
 def StudentClass_List_detail(request, id):
 
@@ -270,7 +342,12 @@ def StudentClass_List_detail(request, id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(tags=["Course"])
 class Course_list(APIView):
+    @extend_schema(
+        request=s.CourseSerializer,
+        responses={status.HTTP_201_CREATED: s.CourseSerializer},
+    )
     def post(self, request):
         data = request.data
         if data:
@@ -281,6 +358,9 @@ class Course_list(APIView):
             return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
         return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        responses={status.HTTP_200_OK: s.CourseSerializer(many=True)},
+    )
     def get(self, request):
         try:
             queryset = m.Course.objects.all()
@@ -290,12 +370,25 @@ class Course_list(APIView):
         return Response(serialized.data, status.HTTP_200_OK)
 
 
+@extend_schema(tags=["Place"])
 class Building(APIView):
+    @extend_schema(
+        request=s.BuildingSerializer,
+        responses={
+            200: s.BuildingSerializer
+        }
+    )
     def get(self, request):
         qs = m.Building.objects.all()
         serialized = s.BuildingSerializer(qs, many=True)
         return Response(serialized.data, 200)
 
+    @extend_schema(
+        request=s.BuildingSerializer,
+        responses={
+            201: s.BuildingSerializer
+        }
+    )
     def post(self, request):
         serializer = s.BuildingSerializer(data=request.data)
         if serializer.is_valid():
@@ -305,12 +398,25 @@ class Building(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=["Place"])
 class Room(APIView):
+    @extend_schema(
+        request=None,
+        responses={
+            200: s.RoomSerializer
+        }
+    )
     def get(self, request):
         qs = m.Room.objects.all()
         serialized = s.RoomSerializer(qs, many=True)
         return Response(serialized.data, 200)
 
+    @extend_schema(
+        request=s.RoomSerializer,
+        responses={
+            201: s.RoomSerializer
+        }
+    )
     def post(self, request):
         serializer = s.RoomSerializer(data=request.data)
         if serializer.is_valid():
@@ -320,35 +426,28 @@ class Room(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-class Department(APIView):
-    def get(self, request):
-        qs = m.Department.objects.all()
-        serialized = s.DepartmentSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-
-    def post(self, request):
-        serializer = s.DepartmentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@extend_schema(tags=["Department"])
+class DepartmentList(ListCreateAPIView):
+    queryset = m.Department.objects.all()
+    serializer_class = s.DepartmentSerializer
 
 
-class ConstValue(APIView):
-    def get(self, request):
-        qs = m.ConstValue.objects.all()
-        serialized = s.ConstValueSerializer(qs, many=True)
-        return Response(serialized.data, 200)
+@extend_schema(tags=["Department"])
+class DepartmentDetail(RetrieveUpdateDestroyAPIView):
+    queryset = m.Department.objects.all()
+    serializer_class = s.DepartmentSerializer
 
-    def post(self, request):
-        serializer = s.ConstValueSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@extend_schema(tags=["ConstValue"])
+class ConstValueList(ListCreateAPIView):
+    queryset = m.ConstValue.objects.all()
+    serializer_class = s.ConstValueSerializer
+
+
+@extend_schema(tags=["ConstValue"])
+class ConstValueDetail(RetrieveUpdateDestroyAPIView):
+    queryset = m.ConstValue.objects.all()
+    serializer_class = s.ConstValueSerializer
 
 class FixedTuitionFee(APIView):
     def get(self, request, id):

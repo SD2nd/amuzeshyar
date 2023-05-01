@@ -108,9 +108,13 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model= m.Department
         fields = "__all__"
 class ConstValueSerializer(serializers.ModelSerializer):
+    parent_title = serializers.SerializerMethodField()
     class Meta:
         model = m.ConstValue
         fields = "__all__"
+    
+    def get_parent_title(self, obj):
+        return obj.parent.title if obj.parent else None
 class FixedTuitionFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.FixedTuitionFee
@@ -123,3 +127,7 @@ class StudentInvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.SemesterCourseTuition
         fields = "__all__"
+        
+
+    
+    

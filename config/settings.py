@@ -39,8 +39,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'amuzeshyar',
-    'rest_framework'
+    'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Amuzeshyar API',
+    'DESCRIPTION': 'This belongs to a university project, Stimulating an online course selection system. We used Python and Django to develop it. ',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,17 +92,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nifty_shaw',
-        'USER': 'root',  
-        'PASSWORD': 'QLg6aDCHKs4VVgnzU0Et40Ce',  
-        'HOST': 'may.iran.liara.ir',  
-        'PORT': '31362',  
-        'OPTIONS': {  
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
-        }  
+        'USER': 'root',
+        'PASSWORD': 'QLg6aDCHKs4VVgnzU0Et40Ce',
+        'HOST': 'may.iran.liara.ir',
+        'PORT': '31362',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
-
-
 
 
 # Password validation
