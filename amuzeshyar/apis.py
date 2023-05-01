@@ -517,3 +517,29 @@ class StudentInvoice(APIView):
         qs = m.StudentInvoice.objects.all()
         serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
         return Response(serialized.data, 200)
+
+
+
+class Semester(APIView):
+    def get(self, request, id):
+        qs = m.Semester.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.SemesterSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.SemesterSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def Semester_List_detail(request):
+        qs = m.Semester.objects.all()
+        serialized = s.SemesterSerializer(qs, many=True)
+        return Response(serialized.data, 200)
