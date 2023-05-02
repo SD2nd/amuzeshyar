@@ -2,12 +2,17 @@ from rest_framework import serializers
 
 from .models import (
     Person,
+    Email,)
+from .models import (
+    Person,
     Email,
     PhoneNumber,
     Student,
     Address,
     ClassAttendance,
     StudentClass,
+    Specialization,
+
 )
 
 
@@ -95,4 +100,15 @@ class ClassAttendanceSerializer(serializers.ModelSerializer):
 class StudentClassSerializer(serializers.ModelSerializer): 
     class Meta:
         model = StudentClass
-        fields = "__all__"    
+        fields = "__all__"
+
+class SpecializationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialization
+        fields = "__all__"
+
+# kamyar
+class SpecializationSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = Specialization
+       fields = "__all__"

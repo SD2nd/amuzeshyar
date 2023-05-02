@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .apis import Person, Student, ClassAttendance_List, ClassAttendance_List_detail, StudentClass_list, StudentClass_List_detail
+from .apis import Person, Student, ClassAttendance_List, ClassAttendance_List_detail, StudentClass_list, StudentClass_List_detail , Specialization
 
 # config URL Configuration
 
@@ -36,5 +36,7 @@ urlpatterns = [
     #studentClass
     path('api/v1/studentClass/', StudentClass_list, name="get_class_attenndanceList"),
     path('api/v1/studentClass/<int:id>', StudentClass_List_detail),
+
+    path('api/v1/SpecializationClass/', Specialization.as_view(), name="get_class_attenndanceList"),
 
 ]
