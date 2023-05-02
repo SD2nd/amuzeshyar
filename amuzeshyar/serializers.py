@@ -106,9 +106,3 @@ class SpecializationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialization
         fields = "__all__"
-
-# kamyar
-class SpecializationSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = Specialization
-       fields = "__all__"
