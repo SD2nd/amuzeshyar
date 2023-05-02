@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 
 from amuzeshyar import models as m
@@ -5,11 +6,16 @@ from amuzeshyar import models as m
 class PersonResponseSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
 
     class Meta:
         model = m.Person
         fields = "__all__"
 
+    def get_age(self, obj):
+        
+        return datetime.date.today().year - obj.birth_date.year
+        
     def get_role(self, obj):
         return obj.role.title if obj.role else None
     
@@ -40,11 +46,13 @@ class StudentResponseSerializer(serializers.ModelSerializer):
     phone_numbers = serializers.SerializerMethodField()
     addresses = serializers.SerializerMethodField()
 
+
     class Meta:
         model = m.Student
         fields = "__all__"
         extra_fields = ["email", "addresses", "phone_numbers"]
 
+    
     def get_registration_type(self, obj):
         return obj.registration_type.title if obj.registration_type else None
 
