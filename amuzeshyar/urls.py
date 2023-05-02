@@ -1,6 +1,7 @@
 
 from django.urls import path
 from amuzeshyar import apis as a
+from amuzeshyar import views as v
 # config URL Configuration
 
 # The `urlpatterns` list routes URLs to views. For more information please see:
@@ -67,5 +68,5 @@ urlpatterns = [
     #constvalues
     path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
     path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
-    
+
 ]

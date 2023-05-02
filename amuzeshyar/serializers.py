@@ -128,12 +128,21 @@ class FixedTuitionFeeSerializer(serializers.ModelSerializer):
         model = m.FixedTuitionFee
         fields = "__all__"
 class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
+    course_type = serializers.SerializerMethodField()
+    field_of_study = serializers.SerializerMethodField()
+    unit_type = serializers.SerializerMethodField()
     class Meta:
         model = m.SemesterCourseTuition
         fields = "__all__"
+    def get_course_type(self, obj):
+        return obj.course_type.title if obj.course_type else None
+    def get_field_of_study(self, obj):
+        return  obj.field_of_study.title if obj.field_of_study else None
+    def get_unit_type(self, obj):
+        return  obj.unit_type.title if obj.unit_type else None
 class StudentInvoiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = m.SemesterCourseTuition
+        model = m.StudentInvoice
         fields = "__all__"
         
 

@@ -15,6 +15,7 @@ class ConstValue(models.Model):
     def __str__(self) -> str:
         return self.title
 
+
 class Person(models.Model):
     first_name = models.CharField(
         verbose_name="نام",
@@ -30,18 +31,19 @@ class Person(models.Model):
         db_index=True
     )
     father_name = models.CharField(
-        verbose_name="نام بدر",max_length=CharFiledLength.short_title)
+        verbose_name="نام بدر", max_length=CharFiledLength.short_title)
     role = models.ForeignKey(
-        ConstValue, verbose_name="نقش سازمانی",on_delete=models.SET_NULL, null=True)
-    gender = models.BooleanField(verbose_name="جنسیت",default=0)
-    birth_date = models.DateField(verbose_name=" تاریخ تولد",)
+        ConstValue, verbose_name="نقش سازمانی", on_delete=models.SET_NULL, null=True)
+    gender = models.BooleanField(verbose_name="جنسیت", default=0)
+    birth_date = models.DateField(verbose_name=" تاریخ تولد", )
 
-    class Meta: 
+    class Meta:
         verbose_name = "شخص"
         verbose_name_plural = "اشخاص"
 
     def __str__(self) -> str:
         return self.first_name + " " + self.last_name
+
 
 class Address(models.Model):
     address = models.CharField(max_length=CharFiledLength.description)
@@ -56,6 +58,7 @@ class Building(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+
     def __str__(self) -> str:
         return self.title
 
@@ -81,6 +84,7 @@ class Department(models.Model):
     def __str__(self) -> str:
         return self.title
 
+
 class Professor(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     academic_rank = models.ForeignKey(
@@ -96,6 +100,8 @@ class Professor(models.Model):
 class Major(models.Model):
     title = models.CharField(max_length=CharFiledLength.short_title)
     english_title = models.CharField(max_length=CharFiledLength.short_title)
+    def __str__(self):
+        return self.title
 
 
 class Semester(models.Model):
@@ -112,6 +118,8 @@ class Semester(models.Model):
     exams_start_date = models.DateField()
     exams_end_date = models.DateField()
     year = models.PositiveSmallIntegerField()
+    def __str__(self):
+        return str(self.year)
 
 
 class Student(models.Model):
@@ -145,9 +153,9 @@ class Course(models.Model):
     theory_units = models.PositiveSmallIntegerField(default=0)
     practical_units = models.PositiveSmallIntegerField(default=0)
     course_type = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True,related_name="Course_course_type")
+        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_course_type")
     degree_level = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True,related_name="Course_degree_level")
+        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_degree_level")
     specialization = models.ForeignKey(
         Specialization, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -262,11 +270,11 @@ class PhoneNumber(models.Model):
 
 
 class FixedTuitionFee(models.Model):
-    semester = models.ForeignKey(Semester, on_delete=models.SET_NULL, null=True)
-    fee = models.IntegerField()
-    year = models.PositiveSmallIntegerField()
-    field_of_study = models.ForeignKey(
-        Major, on_delete=models.SET_NULL, null=True)
+    semester = models.ForeignKey(Semester,verbose_name="ترم", on_delete=models.SET_NULL, null=True)
+    fee = models.IntegerField(verbose_name="مبلغ")
+    year = models.PositiveSmallIntegerField(verbose_name="سال")
+    field_of_study = models.ForeignKey(verbose_name="رشته تحصیلی",
+                                       to="Major", on_delete=models.SET_NULL, null=True)
 
 
 class StudentInvoice(models.Model):

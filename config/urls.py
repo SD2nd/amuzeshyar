@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from amuzeshyar import views
+from amuzeshyar import views as v
 from .views import home
 
 urlpatterns = [
@@ -27,7 +27,9 @@ urlpatterns = [
     path('edu/api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('edu/api/schema/swaggerui/',
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path("forms/person/<int:id>", views.load_person_form ),
-    path("forms/person/", views.person_form ),
+    path("forms/person/<int:id>", v.load_person_form ),
+    path("forms/person/", v.person_form ),
+    path('forms/fixedtuition/<int:id>', v.fixed_tuition_edit_form),
+    path('forms/fixedtuition/', v.fixed_tuition_form),
     
 ]
