@@ -69,4 +69,13 @@ urlpatterns = [
     path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
     path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
 
+    #Announcement
+    path('ann', a.Announcement.Announcement_List_detail),
+    path('ann/', a.Announcement.as_view()),
+    path('ann/<int:id>', a.Announcement.as_view()),
+    #AnnouncementText
+    path('anntext', a.AnnouncementText.Announcement_List_detail),
+    path('anntext/', a.AnnouncementText.as_view()),
+    path('anntext/<int:id>', a.AnnouncementText.as_view()),
+
 ]

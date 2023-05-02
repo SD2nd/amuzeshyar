@@ -153,7 +153,13 @@ class StudentInvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.StudentInvoice
         fields = "__all__"
-        
-
+class AnnouncementTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.AnnouncementText
+        fields = "__all__"
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.Announcement
+        fields = "__all__"
     
     
