@@ -96,8 +96,9 @@ class Professor(models.Model):
 class Major(models.Model):
     title = models.CharField(max_length=CharFiledLength.short_title)
     english_title = models.CharField(max_length=CharFiledLength.short_title)
-
-
+    bachelor_unit= models.PositiveSmallIntegerField(verbose_name="تعداد واحد مورد نیاز برای کارشناسی",null=True)
+    master_unit= models.PositiveSmallIntegerField(verbose_name="تعداد واحد مورد نیاز برای کارشناسی ارشد",null=True)
+    phd_unit= models.PositiveSmallIntegerField(verbose_name="تعداد واحد مورد نیاز برای دکتری",null=True)
 class Semester(models.Model):
     semester_type = models.ForeignKey(
         ConstValue, on_delete=models.SET_NULL, null=True)
