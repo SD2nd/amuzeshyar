@@ -45,8 +45,8 @@ class StudentResponseSerializer(serializers.ModelSerializer):
     graduation_date = serializers.SerializerMethodField()
     phone_numbers = serializers.SerializerMethodField()
     addresses = serializers.SerializerMethodField()
-
-
+    passed_grades=serializers.SerializerMethodField()
+    left_grades=serializers.SerializerMethodField()
     class Meta:
         model = m.Student
         fields = "__all__"
@@ -55,7 +55,16 @@ class StudentResponseSerializer(serializers.ModelSerializer):
     
     def get_registration_type(self, obj):
         return obj.registration_type.title if obj.registration_type else None
-
+    def get_passed_grades(self,obj):
+        student_id =obj.id
+        s =m.StudentClass.objects.filter(student_id=student_id, grade__gt = 10)
+        return len(s)
+    def get_left_grades(self,obj):
+        student_id=obj.id
+        units = obj.field_of_study.bachelor_unit
+        passed=len(m.StudentClass.objects.filter(student_id=student_id, grade__gt = 10))
+        
+        return units-passed
     def get_field_of_study(self, obj):
         return obj.field_of_study.title if obj.field_of_study else None
 
