@@ -12,21 +12,36 @@ class ConstValue(models.Model):
     title = models.CharField(max_length=CharFiledLength.long_title)
     parent = models.ForeignKey(to='ConstValue', on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self) -> str:
+        return self.title
 
 class Person(models.Model):
-    first_name = models.CharField(max_length=CharFiledLength.short_title)
-    last_name = models.CharField(max_length=CharFiledLength.short_title)
+    first_name = models.CharField(
+        verbose_name="نام",
+        max_length=CharFiledLength.short_title)
+    last_name = models.CharField(
+        verbose_name="نام خانوادگی",
+        max_length=CharFiledLength.short_title)
     national_id = models.CharField(
+        verbose_name="کدملی",
         max_length=10,
         db_column="national_id",
         primary_key=True,
         db_index=True
     )
-    father_name = models.CharField(max_length=CharFiledLength.short_title)
-    role = models.ForeignKey(ConstValue, on_delete=models.SET_NULL, null=True)
-    gender = models.BooleanField(default=0)
-    birth_date = models.DateField()
+    father_name = models.CharField(
+        verbose_name="نام بدر",max_length=CharFiledLength.short_title)
+    role = models.ForeignKey(
+        ConstValue, verbose_name="نقش سازمانی",on_delete=models.SET_NULL, null=True)
+    gender = models.BooleanField(verbose_name="جنسیت",default=0)
+    birth_date = models.DateField(verbose_name=" تاریخ تولد",)
 
+    class Meta: 
+        verbose_name = "شخص"
+        verbose_name_plural = "اشخاص"
+
+    def __str__(self) -> str:
+        return self.first_name + " " + self.last_name
 
 class Address(models.Model):
     address = models.CharField(max_length=CharFiledLength.description)
@@ -41,6 +56,8 @@ class Building(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+    def __str__(self) -> str:
+        return self.title
 
 
 class Room(models.Model):
@@ -61,6 +78,8 @@ class Department(models.Model):
     building = models.ForeignKey(
         Building, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self) -> str:
+        return self.title
 
 class Professor(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)

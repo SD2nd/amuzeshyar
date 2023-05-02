@@ -19,26 +19,53 @@ from amuzeshyar import apis as a
 app_name = "amuzeshyar"
 urlpatterns = [
     # person
-    path('api/v1/persons', a.Person.all_persons, name= "all_persons"),
-    path('api/v1/persons/', a.Person.as_view(), name= "create_person"),
-    path('api/v1/persons/<str:national_id>', a.Person.as_view(), name= "get_edit_delete_person"),
+    path('persons/', a.PersonList.as_view(), name= "create_list_all_person"),
+    path('persons/<str:national_id>', a.PersonDetail.as_view(), name= "get_edit_delete_person"),
     
     # student
-    path('api/v1/students', a.Student.get_students, name= "get_all_students"),
-    path('api/v1/students/', a.Student.as_view(), name= "create_new_student"),
-    path('api/v1/students/<int:student_id>', a.Student.as_view(), name= "get_edit_delete_student"),
+    path('students/', a.StudentList.as_view(), name= "create_list_all_student"),
+    path('students/<int:student_id>', a.StudentDetail.as_view(), name= "get_edit_delete_student"),
 
     #classAttendance
-    path('api/v1/classAttendances/', a.ClassAttendance_List, name="get_class_attenndanceList"),
-    path('api/v1/classAttendances/<int:id>', a.ClassAttendance_List_detail),
+    path('classAttendances/', a.ClassAttendance_List, name="get_class_attenndanceList"),
+    path('classAttendances/<int:id>', a.ClassAttendance_List_detail),
 
     #studentClass
-    path('api/v1/studentClass/', a.StudentClass_list, name="get_class_attenndanceList"),
-    path('api/v1/studentClass/<int:id>', a.StudentClass_List_detail),
+    path('studentClass/', a.StudentClass_list, name="get_class_attenndanceList"),
+    path('studentClass/<int:id>', a.StudentClass_List_detail),
     
     #Course
-    path('api/v1/Course/',a.Course_list.as_view(), name="get_class_attenndanceList"),
-  #  path('api/v1/studentClass/<int:id>', StudentClass_List_detail),
+    path('Course/',a.Course_list.as_view(), name="get_class_attenndanceList"),
+  #  path('studentClass/<int:id>', StudentClass_List_detail),
 
+    #Building 
+    path('buildings/', a.Building.as_view()),
+    
+    #Room
+    path('rooms/', a.Room.as_view()),
 
+    #Department
+    path('departments/', a.DepartmentList.as_view()),
+    path('departments/<int:pk>', a.DepartmentDetail.as_view()),
+    
+
+    #FixedTuitionFee
+    path('fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
+    path('fixedfees/', a.FixedTuitionFee.as_view()),
+    path('fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
+
+    #SemesterCourseTuition
+    path('coursetuitions', a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
+    path('coursetuitions/', a.SemesterCourseTuition.as_view()),
+    path('coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
+
+    #StudentInvoice
+    path('invoices', a.StudentInvoice.StudentInvoice_List_detail),
+    path('invoices/', a.StudentInvoice.as_view()),
+    path('invoices/<int:id>', a.StudentInvoice.as_view()),
+
+    #constvalues
+    path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
+    path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
+    
 ]

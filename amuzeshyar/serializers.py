@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 
 from amuzeshyar import models as m
@@ -5,11 +6,16 @@ from amuzeshyar import models as m
 class PersonResponseSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
 
     class Meta:
         model = m.Person
         fields = "__all__"
 
+    def get_age(self, obj):
+        
+        return datetime.date.today().year - obj.birth_date.year
+        
     def get_role(self, obj):
         return obj.role.title if obj.role else None
     
@@ -40,11 +46,13 @@ class StudentResponseSerializer(serializers.ModelSerializer):
     phone_numbers = serializers.SerializerMethodField()
     addresses = serializers.SerializerMethodField()
 
+
     class Meta:
         model = m.Student
         fields = "__all__"
         extra_fields = ["email", "addresses", "phone_numbers"]
 
+    
     def get_registration_type(self, obj):
         return obj.registration_type.title if obj.registration_type else None
 
@@ -92,3 +100,42 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Course
         fields = "__all__"    
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.Room
+        fields = "__all__"
+
+class BuildingSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = m.Building
+        fields = "__all__"
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= m.Department
+        fields = "__all__"
+class ConstValueSerializer(serializers.ModelSerializer):
+    parent_title = serializers.SerializerMethodField()
+    class Meta:
+        model = m.ConstValue
+        fields = "__all__"
+    
+    def get_parent_title(self, obj):
+        return obj.parent.title if obj.parent else None
+class FixedTuitionFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.FixedTuitionFee
+        fields = "__all__"
+class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.SemesterCourseTuition
+        fields = "__all__"
+class StudentInvoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.SemesterCourseTuition
+        fields = "__all__"
+        
+
+    
+    
