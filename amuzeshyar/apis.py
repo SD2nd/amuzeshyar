@@ -466,6 +466,7 @@ class FixedTuitionFee(APIView):
             return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response({"msg": "Payload Required"}, 400)
 
+
     @api_view(['GET'])
     def FixedTuitionFee_List_detail(request):
         qs = m.FixedTuitionFee.objects.all()
@@ -517,3 +518,51 @@ class StudentInvoice(APIView):
         qs = m.StudentInvoice.objects.all()
         serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
         return Response(serialized.data, 200)
+
+class AnnouncementText(APIView):
+    def get(self, request, id):
+        qs = m.AnnouncementText.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.AnnouncementTextSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.AnnouncementTextSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def Announcement_List_detail(request):
+        qs = m.AnnouncementText.objects.all()
+        serialized = s.AnnouncementTextSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+
+class Announcement(APIView):
+    def get(self, request, id):
+        qs = m.Announcement.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.AnnouncementSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.AnnouncementSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def Announcement_List_detail(request):
+        qs = m.Announcement.objects.all()
+        serialized = s.AnnouncementSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
