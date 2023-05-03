@@ -77,5 +77,4 @@ urlpatterns = [
     path('anntext', a.AnnouncementText.Announcement_List_detail),
     path('anntext/', a.AnnouncementText.as_view()),
     path('anntext/<int:id>', a.AnnouncementText.as_view()),
-
 ]

@@ -63,7 +63,7 @@ class StudentResponseSerializer(serializers.ModelSerializer):
         student_id=obj.id
         units = obj.field_of_study.bachelor_unit
         passed=len(m.StudentClass.objects.filter(student_id=student_id, grade__gt = 10))
-        
+
         return units-passed
     def get_field_of_study(self, obj):
         return obj.field_of_study.title if obj.field_of_study else None
@@ -161,5 +161,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Announcement
         fields = "__all__"
+        
+
     
     
