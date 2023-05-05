@@ -77,4 +77,9 @@ urlpatterns = [
     path('anntext', a.AnnouncementText.Announcement_List_detail),
     path('anntext/', a.AnnouncementText.as_view()),
     path('anntext/<int:id>', a.AnnouncementText.as_view()),
+    #Semester
+    path('coursetuitions', a.Semester.Semester_List_detail),
+    path('coursetuitions/', a.Semester.as_view()),
+    path('coursetuitions/<int:id>', a.Semester.as_view()),
+
 ]
