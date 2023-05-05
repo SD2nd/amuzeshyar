@@ -530,6 +530,26 @@ class AnnouncementText(APIView):
         payload = request.data
         if payload:
             Serialized = s.AnnouncementTextSerializer(data=payload)
+    
+    @api_view(['GET'])
+    def Announcement_List_detail(request):
+        qs = m.AnnouncementText.objects.all()
+        serialized = s.AnnouncementTextSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+
+
+class Semester(APIView):
+    def get(self, request, id):
+        qs = m.Semester.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.SemesterSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.SemesterSerializer(data=payload)
             if Serialized.is_valid():
                 Serialized.save()
                 return Response(Serialized.data, status=status.HTTP_201_CREATED)
@@ -537,10 +557,12 @@ class AnnouncementText(APIView):
         return Response({"msg": "Payload Required"}, 400)
 
     @api_view(['GET'])
-    def Announcement_List_detail(request):
-        qs = m.AnnouncementText.objects.all()
-        serialized = s.AnnouncementTextSerializer(qs, many=True)
+
+    def Semester_List_detail(request):
+        qs = m.Semester.objects.all()
+        serialized = s.SemesterSerializer(qs, many=True)
         return Response(serialized.data, 200)
+    
 
 
 class Announcement(APIView):
@@ -566,3 +588,4 @@ class Announcement(APIView):
         serialized = s.AnnouncementSerializer(qs, many=True)
         return Response(serialized.data, 200)
 
+    
