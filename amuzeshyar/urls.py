@@ -1,85 +1,97 @@
 
 from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 from amuzeshyar import apis as a
 from amuzeshyar import views as v
-# config URL Configuration
-
-# The `urlpatterns` list routes URLs to views. For more information please see:
-#     https://docs.djangoproject.com/en/4.1/topics/http/urls/
-# Examples:
-# Function views
-#     1. Add an import:  from my_app import views
-#     2. Add a URL to urlpatterns:  path('', views.home, name='home')
-# Class-based views
-#     1. Add an import:  from other_app.views import Home
-#     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-# Including another URLconf
-#     1. Import the include() function: from django.urls import include, path
-#     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 
 app_name = "amuzeshyar"
+# APIS
 urlpatterns = [
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swaggerui/',
+         SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     # person
-    path('persons/', a.PersonList.as_view(), name= "create_list_all_person"),
-    path('persons/<str:national_id>', a.PersonDetail.as_view(), name= "get_edit_delete_person"),
-    
+    path('api/v1/persons/', a.PersonList.as_view(),
+         name="create_list_all_person"),
+    path('api/v1/persons/<str:national_id>',
+         a.PersonDetail.as_view(), name="get_edit_delete_person"),
+
     # student
-    path('students/', a.StudentList.as_view(), name= "create_list_all_student"),
-    path('students/<int:student_id>', a.StudentDetail.as_view(), name= "get_edit_delete_student"),
+    path('api/v1/students/', a.StudentList.as_view(),
+         name="create_list_all_student"),
+    path('api/v1/students/<int:student_id>',
+         a.StudentDetail.as_view(), name="get_edit_delete_student"),
 
-    #classAttendance
-    path('classAttendances/', a.ClassAttendance_List, name="get_class_attenndanceList"),
-    path('classAttendances/<int:id>', a.ClassAttendance_List_detail),
+    # classAttendance
+    path('api/v1/classAttendances/', a.ClassAttendance_List,
+         name="get_class_attenndanceList"),
+    path('api/v1/classAttendances/<int:id>', a.ClassAttendance_List_detail),
 
-    #studentClass
-    path('studentClass/', a.StudentClass_list, name="get_class_attenndanceList"),
-    path('studentClass/<int:id>', a.StudentClass_List_detail),
-    
-    #Course
-    path('Course/',a.Course_list.as_view(), name="get_class_attenndanceList"),
-  #  path('studentClass/<int:id>', StudentClass_List_detail),
+    # studentClass
+    path('api/v1/studentClass/', a.StudentClass_list,
+         name="get_class_attenndanceList"),
+    path('api/v1/studentClass/<int:id>', a.StudentClass_List_detail),
 
-    #Building 
-    path('buildings/', a.Building.as_view()),
-    
-    #Room
-    path('rooms/', a.Room.as_view()),
+    # Course
+    path('api/v1/Course/', a.Course_list.as_view(),
+         name="get_class_attenndanceList"),
 
-    #Department
-    path('departments/', a.DepartmentList.as_view()),
-    path('departments/<int:pk>', a.DepartmentDetail.as_view()),
-    
+    # Building
+    path('api/v1/buildings/', a.Building.as_view()),
 
-    #FixedTuitionFee
-    path('fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
-    path('fixedfees/', a.FixedTuitionFee.as_view()),
-    path('fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
+    # Room
+    path('api/v1/rooms/', a.Room.as_view()),
 
-    #SemesterCourseTuition
-    path('coursetuitions', a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
-    path('coursetuitions/', a.SemesterCourseTuition.as_view()),
-    path('coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
+    # Department
+    path('api/v1/departments/', a.DepartmentList.as_view()),
+    path('api/v1/departments/<int:pk>', a.DepartmentDetail.as_view()),
 
-    #StudentInvoice
-    path('invoices', a.StudentInvoice.StudentInvoice_List_detail),
-    path('invoices/', a.StudentInvoice.as_view()),
-    path('invoices/<int:id>', a.StudentInvoice.as_view()),
+    # FixedTuitionFee
+    path('api/v1/fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
+    path('api/v1/fixedfees/', a.FixedTuitionFee.as_view()),
+    path('api/v1/fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
 
-    #constvalues
-    path('constvalues/', a.ConstValueList.as_view(), name= "create_list_all_constvalue"),
-    path('constvalues/<int:pk>', a.ConstValueDetail.as_view(), name= "get_put_patch_delete_constvalue"),
+    # SemesterCourseTuition
+    path('api/v1/coursetuitions',
+         a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
+    path('api/v1/coursetuitions/', a.SemesterCourseTuition.as_view()),
+    path('api/v1/coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
 
-    #Announcement
-    path('ann', a.Announcement.Announcement_List_detail),
-    path('ann/', a.Announcement.as_view()),
-    path('ann/<int:id>', a.Announcement.as_view()),
-    #AnnouncementText
-    path('anntext', a.AnnouncementText.Announcement_List_detail),
-    path('anntext/', a.AnnouncementText.as_view()),
-    path('anntext/<int:id>', a.AnnouncementText.as_view()),
-    #Semester
-    path('coursetuitions', a.Semester.Semester_List_detail),
-    path('coursetuitions/', a.Semester.as_view()),
-    path('coursetuitions/<int:id>', a.Semester.as_view()),
+    # StudentInvoice
+    path('api/v1/invoices', a.StudentInvoice.StudentInvoice_List_detail),
+    path('api/v1/invoices/', a.StudentInvoice.as_view()),
+    path('api/v1/invoices/<int:id>', a.StudentInvoice.as_view()),
 
+    # constvalues
+    path('api/v1/constvalues/', a.ConstValueList.as_view(),
+         name="create_list_all_constvalue"),
+    path('api/v1/constvalues/<int:pk>', a.ConstValueDetail.as_view(),
+         name="get_put_patch_delete_constvalue"),
+
+    # Announcement
+    path('api/v1/ann', a.Announcement.Announcement_List_detail),
+    path('api/v1/ann/', a.Announcement.as_view()),
+    path('api/v1/ann/<int:id>', a.Announcement.as_view()),
+    # AnnouncementText
+    path('api/v1/anntext', a.AnnouncementText.Announcement_List_detail),
+    path('api/v1/anntext/', a.AnnouncementText.as_view()),
+    path('api/v1/anntext/<int:id>', a.AnnouncementText.as_view()),
+
+    # Semester
+    path('api/v1/coursetuitions', a.Semester.Semester_List_detail),
+    path('api/v1/coursetuitions/', a.Semester.as_view()),
+    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view())
+]
+# Rendered Pages
+urlpatterns += [
+    path('', v.home),
+
+]
+# Forms
+urlpatterns += [
+    path("forms/person/<int:id>", v.load_person_form),
+    path("forms/person", v.person_form),
+    path('forms/fixedtuition/<int:id>', v.fixed_tuition_edit_form),
+    path('forms/fixedtuition', v.fixed_tuition_form),
 ]

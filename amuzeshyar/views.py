@@ -34,3 +34,7 @@ def load_person_form(request, id):
         return HttpResponse("SUCCESS")
     return render(request, "person_form.html", {"form":form})
 
+
+def home(request):
+ return render(request,'home.html')
+
