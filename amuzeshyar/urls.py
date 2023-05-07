@@ -8,8 +8,8 @@ from amuzeshyar import views as v
 app_name = "amuzeshyar"
 # APIS
 urlpatterns = [
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swaggerui/',
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/v1/schema/swaggerui/',
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     # person
     path('api/v1/persons/', a.PersonList.as_view(),
