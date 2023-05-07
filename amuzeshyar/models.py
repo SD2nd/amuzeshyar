@@ -345,7 +345,7 @@ class StudentInvoice(models.Model):
     semester = models.ForeignKey(
         Semester, on_delete=models.SET_NULL, null=True)
     indebtedness = models.IntegerField()
-    
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     def __str__(self) -> str:
         return f"{self.indebtedness}"
 
