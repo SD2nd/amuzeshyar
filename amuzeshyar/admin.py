@@ -11,6 +11,10 @@ class FixedTuitionAdmin(admin.ModelAdmin):
     list_display = ("id", "semester", "field_of_study")
     list_filter = ("year",)
     search_fields = ("field_of_study",)
+class SemesterAdmin(admin.ModelAdmin):
+    list_display = ("semester_type", "registration_start_date", "year" )
+    list_filter = ("year",)
+    #search_fields = ("semester_type")
 
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
@@ -18,3 +22,4 @@ admin.site.register(m.Student)
 admin.site.register(m.Department)
 admin.site.register(m.Room)
 admin.site.register(m.Major)
+admin.site.register(m.Semester,SemesterAdmin)
