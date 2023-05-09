@@ -163,17 +163,17 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 
-class Semester(serializers.ModelSerializer):
+class SemesterSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Semester
         fields = "__all__"
         
-class Class(serializers.ModelSerializer):
+class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Class
         fields = "__all__"
         
-class ClassSchedule(serializers.ModelSerializer):
+class ClassScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.ClassSchedule
         fields = "__all__"
