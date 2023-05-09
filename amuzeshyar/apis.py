@@ -589,3 +589,75 @@ class Announcement(APIView):
         return Response(serialized.data, 200)
 
     
+
+class Specialization(APIView):
+    def post(self, request):
+        data = request.data
+        if data:
+            serialized = s.SpecializationSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        try:
+            queryset = m.SpecializationModel.objects.all()
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = s.SpecializationSerializer(queryset,many=True)
+        return Response(serialized.data, status.HTTP_200_OK)
+
+    def delete(self, request, national_id):
+        qs = m.Person.objects.filter(national_id=national_id).first()
+        if qs:
+            qs.delete()
+            return Response({"msg": "deleted"}, status.HTTP_200_OK)
+        return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, national_id):
+        pass
+
+    def patch(self, request, national_id):
+        pass
+
+    def delete(self, request, national_id):
+        pass
+
+
+
+class Specialization(APIView):
+   def post(self, request):
+       data = request.data
+       if data:
+           serialized = s.SpecializationSerializer(data=data)
+           if serialized.is_valid():
+               serialized.save()
+               return Response(serialized.data, status.HTTP_201_CREATED)
+           return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+       return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
+
+   def get(self, request):
+       try:
+           queryset = m.Specialization.objects.all()
+       except ObjectDoesNotExist:
+           return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+       serialized = s.SpecializationSerializer(queryset,many=True)
+       return Response(serialized.data, status.HTTP_200_OK)
+
+   def delete(self, request, national_id):
+       qs = m.Person.objects.filter(national_id=national_id).first()
+       if qs:
+           qs.delete()
+           return Response({"msg": "deleted"}, status.HTTP_200_OK)
+       return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+   def put(self, request, national_id):
+       pass
+
+   def patch(self, request, national_id):
+       pass
+
+   def delete(self, request, national_id):
+       pass

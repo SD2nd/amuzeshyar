@@ -177,4 +177,9 @@ class ClassSchedule(serializers.ModelSerializer):
     class Meta:
         model = m.ClassSchedule
         fields = "__all__"
+
+class SpecializationSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = m.Specialization
+       fields = "__all__"
         

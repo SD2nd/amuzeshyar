@@ -14,4 +14,10 @@ class FixedTuitionForm(forms.ModelForm):
 class SemesterForm(forms.ModelForm):
     class Meta:
         model = m.Semester
-        fields = "__all__"        
+        fields = "__all__"
+
+
+class SpecializationForm(forms.ModelForm):
+    class Meta:
+        model = m.Specialization
+        fields = "__all__"

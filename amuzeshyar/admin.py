@@ -16,6 +16,12 @@ class SemesterAdmin(admin.ModelAdmin):
     list_filter = ("year",)
     #search_fields = ("semester_type")
 
+class SpecializationAdmin(admin.ModelAdmin):
+    list_display = ("title","english_title","major")
+    list_filter = ("major",)
+    search_fields = ("title",)
+
+
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
 admin.site.register(m.Student)
@@ -23,3 +29,5 @@ admin.site.register(m.Department)
 admin.site.register(m.Room)
 admin.site.register(m.Major)
 admin.site.register(m.Semester,SemesterAdmin)
+admin.site.register(m.Specialization, SpecializationAdmin)
+
