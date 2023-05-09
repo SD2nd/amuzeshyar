@@ -28,6 +28,10 @@ urlpatterns = [
          name="get_class_attenndanceList"),
     path('api/v1/classAttendances/<int:id>', a.ClassAttendance_List_detail),
 
+    # Specialization
+    path('api/V1/Specialization', a.Specialization.as_view()),
+
+
     # studentClass
     path('api/v1/studentClass/', a.StudentClass_list,
          name="get_class_attenndanceList"),
@@ -95,3 +99,5 @@ urlpatterns += [
     path('forms/fixedtuition/<int:id>', v.fixed_tuition_edit_form),
     path('forms/fixedtuition', v.fixed_tuition_form),
 ]
+
+
