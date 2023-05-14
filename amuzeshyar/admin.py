@@ -30,4 +30,19 @@ admin.site.register(m.Room)
 admin.site.register(m.Major)
 admin.site.register(m.Semester,SemesterAdmin)
 admin.site.register(m.Specialization, SpecializationAdmin)
+admin.site.register(m.Building)
+admin.site.register(m.Professor)
+admin.site.register(m.Course)
+admin.site.register(m.Class)
+admin.site.register(m.Announcement)
+admin.site.register(m.AnnouncementText)
+admin.site.register(m.SemesterCourseTuition)
+admin.site.register(m.ClassAttendance)
+admin.site.register(m.StudentClass)
+admin.site.register(m.StudentInvoice)
+
+
+
+
+
 
