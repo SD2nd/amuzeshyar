@@ -21,25 +21,43 @@ class SpecializationAdmin(admin.ModelAdmin):
     list_filter = ("major",)
     search_fields = ("title",)
 
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ("person","entry_semester","field_of_study")
+
+class ProfessorAdmin(admin.ModelAdmin):
+    list_display = ("person","academic_rank")
+
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ("course","instructor","semester")
+
+class StudentClassAdmin(admin.ModelAdmin):
+    list_display = ("student","session","grade", "is_active", "semester")
+    
+    def semester(self, obj):
+        return obj.session.semester
+
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ("title","degree_level")
 
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
-admin.site.register(m.Student)
+admin.site.register(m.Student, StudentAdmin)
 admin.site.register(m.Department)
 admin.site.register(m.Room)
 admin.site.register(m.Major)
 admin.site.register(m.Semester,SemesterAdmin)
 admin.site.register(m.Specialization, SpecializationAdmin)
 admin.site.register(m.Building)
-admin.site.register(m.Professor)
-admin.site.register(m.Course)
-admin.site.register(m.Class)
+admin.site.register(m.Professor, ProfessorAdmin)
+admin.site.register(m.Course, CourseAdmin)
+admin.site.register(m.Class, ClassAdmin)
 admin.site.register(m.Announcement)
 admin.site.register(m.AnnouncementText)
 admin.site.register(m.SemesterCourseTuition)
 admin.site.register(m.ClassAttendance)
-admin.site.register(m.StudentClass)
+admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice)
+admin.site.register(m.ClassSchedule)
 
 
 
