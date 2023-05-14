@@ -153,7 +153,7 @@ class Student(models.Model):
     graduation_date = models.DateField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.person
+        return self.person.__str__()
 
 
 class ProfessorEvaluationParameter(models.Model):
