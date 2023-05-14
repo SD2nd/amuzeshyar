@@ -52,7 +52,7 @@ class Address(models.Model):
     is_default = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return f"{self.address} {self.person}"
+        return f"{self.address} {self.person.__str__()}"
 
 
 class Building(models.Model):
@@ -79,7 +79,7 @@ class Room(models.Model):
         ConstValue, on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
-        return f"{self.building} {self.code}"
+        return f"{self.building.__str__()} {self.code}"
 
 
 class Department(models.Model):
@@ -105,7 +105,7 @@ class Professor(models.Model):
     research_area = models.CharField(max_length=CharFiledLength.long_title)
 
     def __str__(self) -> str:
-        return self.person
+        return self.person.__str__()
 
 
 class Major(models.Model):
@@ -138,7 +138,7 @@ class Semester(models.Model):
     year = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return f"{self.year} {self.semester_type}"
+        return f"{self.year} {self.semester_type.__str__()}"
 
 
 class Student(models.Model):
@@ -202,7 +202,7 @@ class Class(models.Model):
     exam_datetime = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"{self.course} {self.instructor} {self.semester}"
+        return f"{self.course.__str__()} {self.instructor.__str__()} {self.semester.__str__()}"
 
 
 class ProfessorEvaluation(models.Model):
@@ -279,7 +279,7 @@ class StudentClass(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return f"{self.student} {self.session} {self.grade}"
+        return f"{self.student.__str__()} {self.session.__str__()} {self.grade}"
 
 
 class GradeAppeal(models.Model):
@@ -302,7 +302,7 @@ class MajorSpecializationDepartment(models.Model):
         Department, on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
-        return f"{self.specialization} {self.department}"
+        return f"{self.specialization.__str__()} {self.department.__str__()}"
 
 
 class ClassSchedule(models.Model):
@@ -313,11 +313,11 @@ class ClassSchedule(models.Model):
     location = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
-        return f"{self.session} \
+        return f"{self.session.__str__()} \
                  {self.day_of_week} \
                  {self.start_at} \
                  {self.end_at} \
-                 {self.location}"
+                 {self.location.__str__()}"
 
 
 class PhoneNumber(models.Model):
@@ -336,7 +336,7 @@ class FixedTuitionFee(models.Model):
     field_of_study = models.ForeignKey(verbose_name="رشته تحصیلی",
                                        to="Major", on_delete=models.SET_NULL, null=True)
     def __str__(self) -> str:
-        return f"{self.semester} {self.field_of_study} {self.year}"
+        return f"{self.semester.__str__()} {self.field_of_study.__str__()} {self.year}"
 
 class StudentInvoice(models.Model):
     description = models.CharField(max_length=CharFiledLength.long_title)
