@@ -1,6 +1,6 @@
 
 from django.urls import path
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 
 from amuzeshyar import apis as a
 from amuzeshyar import views as v
@@ -8,9 +8,7 @@ from amuzeshyar import views as v
 app_name = "amuzeshyar"
 # APIS
 urlpatterns = [
-    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/v1/schema/swaggerui/',
-         SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
     # person
     path('api/v1/persons/', a.PersonList.as_view(),
          name="create_list_all_person"),
