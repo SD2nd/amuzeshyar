@@ -1,7 +1,9 @@
 asgiref==3.6.0
 attrs==23.1.0
 autopep8==2.0.2
+certifi==2023.5.7
 cffi==1.15.1
+charset-normalizer==3.1.0
 cryptography==40.0.2
 Django==4.1
 django-cors-headers==3.14.0
@@ -10,6 +12,7 @@ djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 drf-spectacular==0.26.2
 drf-spectacular-sidecar==2023.5.1
+idna==3.4
 inflection==0.5.1
 jsonschema==4.17.3
 Markdown==3.4.3
@@ -20,7 +23,9 @@ PyJWT==2.6.0
 pyrsistent==0.19.3
 pytz==2023.3
 PyYAML==6.0
+requests==2.30.0
 sqlparse==0.4.3
 tomli==2.0.1
 tzdata==2023.3
 uritemplate==4.1.1
+urllib3==2.0.2
