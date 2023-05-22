@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404
-from .forms import PersonForm, FixedTuitionForm
-from .models import Person, FixedTuitionFee
+from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm
+from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance
 
 # Create your views here.
 
@@ -56,6 +56,38 @@ def home(request, student_id):
             "all_must_be_paid":data["all_must_be_paid"],
             "debt":data["debt"],
         }
+
+def student_class_form(request):
+    form = StudentClassForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "student_class_form.html", {"form":form})
+
+
+def student_class_edit_form(request,id):
+    studentClass = get_object_or_404(StudentClass, id = id )
+    form = StudentClassForm(request.POST or None, instance=studentClass)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "student_class_edit_form.html", {"form":form})
+
+def class_attendance_form(request):
+    form = ClassAttendanceForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "class_attendance_form.html", {"form":form})
+
+
+def class_attendance_edit_form(request,id):
+    classAttendance = get_object_or_404(StudentClass, id = id )
+    form = ClassAttendanceForm(request.POST or None, instance=classAttendance)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "class_attendance_form.html", {"form":form})
         
         
     # units information

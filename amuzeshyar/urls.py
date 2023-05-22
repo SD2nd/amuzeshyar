@@ -98,6 +98,10 @@ urlpatterns += [
     path("forms/person", v.person_form),
     path('forms/fixedtuition/<int:id>', v.fixed_tuition_edit_form),
     path('forms/fixedtuition', v.fixed_tuition_form),
+    path('forms/studentclass/<int:id>', v.student_class_edit_form),
+    path('forms/studentclass', v.student_class_form),
+    path('forms/classattendance/<int:id>', v.class_attendance_edit_form),
+    path('forms/classattendance', v.class_attendance_form),
 ]
 
 
