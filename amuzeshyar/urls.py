@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/v1/students/<int:student_id>',
          a.StudentDetail.as_view(), name="get_edit_delete_student"),
 
-    # classAttendance
+    # classAttendance not ok
     path('api/v1/classAttendances/', a.ClassAttendance_List,
          name="get_class_attenndanceList"),
     path('api/v1/classAttendances/<int:id>', a.ClassAttendance_List_detail),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/V1/Specialization', a.Specialization.as_view()),
 
 
-    # studentClass
+    # studentClass not ok
     path('api/v1/studentClass/', a.StudentClass_list,
          name="get_class_attenndanceList"),
     path('api/v1/studentClass/<int:id>', a.StudentClass_List_detail),
@@ -50,20 +50,20 @@ urlpatterns = [
     path('api/v1/departments/<int:pk>', a.DepartmentDetail.as_view()),
 
     # FixedTuitionFee
-    path('api/v1/fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
-    path('api/v1/fixedfees/', a.FixedTuitionFee.as_view()),
-    path('api/v1/fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
+    path('api/v1/fixedfees/', a.FixedTuitionFee_List),
+    path('api/v1/fixedfees/<int:id>', a.FixedTuitionFee_Detail),
 
-    # SemesterCourseTuition
-    path('api/v1/coursetuitions',
-         a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
-    path('api/v1/coursetuitions/', a.SemesterCourseTuition.as_view()),
-    path('api/v1/coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
+    # SemesterCourseTuition,
+    path('api/v1/coursetuitions/', a.SemesterCourseTuition_List),
+    path('api/v1/coursetuitions/<int:id>', a.SemesterCourseTuition_Detail),
 
     # StudentInvoice
-    path('api/v1/invoices', a.StudentInvoice.StudentInvoice_List_detail),
-    path('api/v1/invoices/', a.StudentInvoice.as_view()),
-    path('api/v1/invoices/<int:id>', a.StudentInvoice.as_view()),
+    path('api/v1/invoices/', a.StudentInvoice_List),
+    path('api/v1/invoices/<int:id>', a.StudentInvoice_Detail),
+
+    # StudentPayment
+    path('api/v1/payments/', a.StudentPayment_List),
+    path('api/v1/payments/<int:id>', a.StudentPayment_Detail),
 
     # constvalues
     path('api/v1/constvalues/', a.ConstValueList.as_view(),

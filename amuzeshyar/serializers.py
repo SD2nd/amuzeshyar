@@ -144,14 +144,19 @@ class ConstValueSerializer(serializers.ModelSerializer):
     
     def get_parent_title(self, obj):
         return obj.parent.title if obj.parent else None
+
+
 class FixedTuitionFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.FixedTuitionFee
         fields = "__all__"
+
+
 class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
     course_type = serializers.SerializerMethodField()
     field_of_study = serializers.SerializerMethodField()
     unit_type = serializers.SerializerMethodField()
+
     class Meta:
         model = m.SemesterCourseTuition
         fields = "__all__"
@@ -161,10 +166,20 @@ class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
         return  obj.field_of_study.title if obj.field_of_study else None
     def get_unit_type(self, obj):
         return  obj.unit_type.title if obj.unit_type else None
+
+
 class StudentInvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.StudentInvoice
         fields = "__all__"
+
+
+class StudentPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.StudentPayment
+        fields = "__all__"
+
+
 class AnnouncementTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.AnnouncementText
