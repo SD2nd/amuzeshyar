@@ -139,6 +139,19 @@ class Semester(models.Model):
 
     def __str__(self):
         return f"{self.year} {self.semester_type.__str__()}"
+    
+    @property
+    def semester_code(self):
+        # hardcoded!
+        term_type = {
+            21:"1",
+            22: "2" ,
+            23: "3",
+        }
+        year_code = str(self.year)[2:]
+        return year_code + term_type[self.semester_type.id]
+        
+        
 
 
 class Student(models.Model):
@@ -151,6 +164,7 @@ class Student(models.Model):
     field_of_study = models.ForeignKey(
         Major, on_delete=models.SET_NULL, null=True)
     graduation_date = models.DateField(null=True, blank=True)
+    entry_year = models.SmallIntegerField(null=True)
 
     def __str__(self) -> str:
         return self.person.__str__()
@@ -191,6 +205,9 @@ class Course(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    @property
+    def units(self):
+        return self.practical_units + self.theory_units
 
 class Class(models.Model):
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
@@ -359,7 +376,9 @@ class StudentPayment(models.Model):
         max_length=CharFiledLength.long_title, null=True, blank=True)
     is_succeeded = models.BooleanField(default=True)
     invoice = models.ForeignKey(
-        StudentInvoice, on_delete=models.SET_NULL, null=True)
+        StudentInvoice, on_delete=models.SET_NULL, null=True, blank=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    
 
 
 class CoursePrerequisite(models.Model):
