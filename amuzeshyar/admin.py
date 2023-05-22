@@ -8,7 +8,7 @@ class PersonAdmin(admin.ModelAdmin):
     search_fields = ("first_name", "last_name")
 
 class FixedTuitionAdmin(admin.ModelAdmin):
-    list_display = ("id", "semester", "field_of_study")
+    list_display = ("id", "semester", "fee","field_of_study")
     list_filter = ("year",)
     search_fields = ("field_of_study",)
 class SemesterAdmin(admin.ModelAdmin):
@@ -38,6 +38,9 @@ class StudentClassAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ("title","degree_level")
+    
+class SemesterCourseTuitionAdmin(admin.ModelAdmin):
+    list_display = ("semester","field_of_study", "course_type", "unit_type", "tuition_per_unit",)
 
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
@@ -53,11 +56,12 @@ admin.site.register(m.Course, CourseAdmin)
 admin.site.register(m.Class, ClassAdmin)
 admin.site.register(m.Announcement)
 admin.site.register(m.AnnouncementText)
-admin.site.register(m.SemesterCourseTuition)
+admin.site.register(m.SemesterCourseTuition, SemesterCourseTuitionAdmin)
 admin.site.register(m.ClassAttendance)
 admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice)
 admin.site.register(m.ClassSchedule)
+admin.site.register(m.StudentPayment)
 
 
 
