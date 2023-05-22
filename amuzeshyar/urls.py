@@ -83,11 +83,13 @@ urlpatterns = [
     # Semester
     path('api/v1/coursetuitions', a.Semester.Semester_List_detail),
     path('api/v1/coursetuitions/', a.Semester.as_view()),
-    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view())
+    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view()),
+    
+    path('api/v1/panel/<int:student_id>',a.first_page )
 ]
 # Rendered Pages
 urlpatterns += [
-    path('', v.home),
+    path('<int:student_id>', v.home),
 
 ]
 # Forms

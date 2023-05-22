@@ -661,3 +661,12 @@ class Specialization(APIView):
 
    def delete(self, request, national_id):
        pass
+
+
+@api_view(["GET"])
+def first_page(request, student_id):
+    
+    qs = m.Student.objects.filter(id = student_id).first()
+    serialized_data = s.FirstPageInformationSerializer(qs, context={"current_term":request.query_params.get("term")})
+    return Response(serialized_data.data, status.HTTP_200_OK)
+    
