@@ -247,7 +247,7 @@ def ClassAttendance_List(request):
         # return json
         classAttendances = m.ClassAttendance.objects.all()
         serializer = s.ClassAttendanceSerializer(classAttendances, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     if request.method == 'POST':
         serializer = s.ClassAttendanceSerializer(data=request.data)
@@ -302,7 +302,7 @@ def StudentClass_list(request):
     if request.method == 'GET':
         studentClass = m.StudentClass.objects.all()
         serializer = s.StudentClassSerializer(studentClass, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     if request.method == 'POST':
         serializer = s.StudentClassSerializer(data=request.data)

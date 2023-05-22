@@ -96,14 +96,31 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ClassAttendanceSerializer(serializers.ModelSerializer):
+
+    student = serializers.SerializerMethodField()
+    session = serializers.SerializerMethodField()
     class Meta:
         model = m.ClassAttendance
         fields = "__all__"
+    def get_student(self, obj):
+        return (obj.student.person.first_name + " " + obj.student.person.last_name)  if obj.student else None
+    
+    def get_session(self, obj):
+        return obj.session.course.title  if obj.session else None
 
 class StudentClassSerializer(serializers.ModelSerializer): 
+
+    student = serializers.SerializerMethodField()
+    session = serializers.SerializerMethodField()
     class Meta:
         model = m.StudentClass
         fields = "__all__"    
+
+    def get_student(self, obj):
+        return (obj.student.person.first_name + " " + obj.student.person.last_name)  if obj.student else None
+    
+    def get_session(self, obj):
+        return obj.session.course.title  if obj.session else None
 
 class CourseSerializer(serializers.ModelSerializer): 
     course_type_title = serializers.SerializerMethodField()
