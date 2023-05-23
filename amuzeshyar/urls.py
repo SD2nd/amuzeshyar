@@ -1,6 +1,5 @@
-
 from django.urls import path
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 
 from amuzeshyar import apis as a
 from amuzeshyar import views as v
@@ -8,9 +7,7 @@ from amuzeshyar import views as v
 app_name = "amuzeshyar"
 # APIS
 urlpatterns = [
-    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/v1/schema/swaggerui/',
-         SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
     # person
     path('api/v1/persons/', a.PersonList.as_view(),
          name="create_list_all_person"),
@@ -23,7 +20,7 @@ urlpatterns = [
     path('api/v1/students/<int:student_id>',
          a.StudentDetail.as_view(), name="get_edit_delete_student"),
 
-    # classAttendance
+    # classAttendance not ok
     path('api/v1/classAttendances/', a.ClassAttendance_List,
          name="get_class_attenndanceList"),
     path('api/v1/classAttendances/<int:id>', a.ClassAttendance_List_detail),
@@ -32,7 +29,7 @@ urlpatterns = [
     path('api/V1/Specialization', a.Specialization.as_view()),
 
 
-    # studentClass
+    # studentClass not ok
     path('api/v1/studentClass/', a.StudentClass_list,
          name="get_class_attenndanceList"),
     path('api/v1/studentClass/<int:id>', a.StudentClass_List_detail),
@@ -52,20 +49,20 @@ urlpatterns = [
     path('api/v1/departments/<int:pk>', a.DepartmentDetail.as_view()),
 
     # FixedTuitionFee
-    path('api/v1/fixedfees', a.FixedTuitionFee.FixedTuitionFee_List_detail),
-    path('api/v1/fixedfees/', a.FixedTuitionFee.as_view()),
-    path('api/v1/fixedfees/<int:id>', a.FixedTuitionFee.as_view()),
+    path('api/v1/fixedfees/', a.FixedTuitionFee_List),
+    path('api/v1/fixedfees/<int:id>', a.FixedTuitionFee_Detail),
 
-    # SemesterCourseTuition
-    path('api/v1/coursetuitions',
-         a.SemesterCourseTuition.SemesterCourseTuition_List_detail),
-    path('api/v1/coursetuitions/', a.SemesterCourseTuition.as_view()),
-    path('api/v1/coursetuitions/<int:id>', a.SemesterCourseTuition.as_view()),
+    # SemesterCourseTuition,
+    path('api/v1/coursetuitions/', a.SemesterCourseTuition_List),
+    path('api/v1/coursetuitions/<int:id>', a.SemesterCourseTuition_Detail),
 
     # StudentInvoice
-    path('api/v1/invoices', a.StudentInvoice.StudentInvoice_List_detail),
-    path('api/v1/invoices/', a.StudentInvoice.as_view()),
-    path('api/v1/invoices/<int:id>', a.StudentInvoice.as_view()),
+    path('api/v1/invoices/', a.StudentInvoice_List),
+    path('api/v1/invoices/<int:id>', a.StudentInvoice_Detail),
+
+    # StudentPayment
+    path('api/v1/payments/', a.StudentPayment_List),
+    path('api/v1/payments/<int:id>', a.StudentPayment_Detail),
 
     # constvalues
     path('api/v1/constvalues/', a.ConstValueList.as_view(),
@@ -85,11 +82,13 @@ urlpatterns = [
     # Semester
     path('api/v1/coursetuitions', a.Semester.Semester_List_detail),
     path('api/v1/coursetuitions/', a.Semester.as_view()),
-    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view())
+    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view()),
+    
+    path('api/v1/panel/<int:student_id>',a.first_page )
 ]
 # Rendered Pages
 urlpatterns += [
-    path('', v.home),
+    path('<int:student_id>', v.home),
 
 ]
 # Forms
@@ -98,6 +97,14 @@ urlpatterns += [
     path("forms/person", v.person_form),
     path('forms/fixedtuition/<int:id>', v.fixed_tuition_edit_form),
     path('forms/fixedtuition', v.fixed_tuition_form),
+    path('forms/studentclass/<int:id>', v.student_class_edit_form),
+    path('forms/studentclass', v.student_class_form),
+    path('forms/classattendance/<int:id>', v.class_attendance_edit_form),
+    path('forms/classattendance', v.class_attendance_form),
+    path('forms/department', v.department_form),
+    path('forms/department/<int:id>', v.department_edit_form),
+    path('forms/room', v.room_form),
+    path('forms/room/<int:id>', v.room_edit_form),
+    path('forms/building', v.building_form),
+    path('forms/building/<int:id>', v.building_edit_form),
 ]
-
-
