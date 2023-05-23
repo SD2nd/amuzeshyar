@@ -4,6 +4,11 @@ from django.urls import path
 from amuzeshyar import apis as a
 from amuzeshyar import views as v
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 app_name = "amuzeshyar"
 # APIS
 urlpatterns = [
@@ -84,11 +89,14 @@ urlpatterns = [
     path('api/v1/coursetuitions/', a.Semester.as_view()),
     path('api/v1/coursetuitions/<int:id>', a.Semester.as_view()),
     
-    path('api/v1/panel/<int:student_id>',a.first_page )
+    path('api/v1/panel/<int:student_id>',a.first_page ),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 # Rendered Pages
 urlpatterns += [
-    path('<int:student_id>', v.home),
+    path('<int:student_id>', v.home, name="home"),
 
 ]
 # Forms
@@ -107,4 +115,6 @@ urlpatterns += [
     path('forms/room/<int:id>', v.room_edit_form),
     path('forms/building', v.building_form),
     path('forms/building/<int:id>', v.building_edit_form),
+    path("login", v.login_form)
+    
 ]

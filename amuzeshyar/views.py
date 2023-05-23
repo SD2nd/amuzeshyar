@@ -1,5 +1,5 @@
 import requests
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm
 from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building
 
@@ -56,6 +56,7 @@ def home(request, student_id):
             "all_must_be_paid":data["all_must_be_paid"],
             "debt":data["debt"],
         }
+        return render(request,'home.html', context=context)
 
 def student_class_form(request):
     form = StudentClassForm(request.POST or None)
@@ -136,3 +137,20 @@ def building_edit_form(request,id):
         form.save()
         return HttpResponse("SUCCESS")
     return render(request, "building_edit_form.html", {"form":form})
+
+def login_form(request):
+    if request.POST:
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        BASE_URL = "http://127.0.0.1:8000/"
+        # student personal information
+        payload = {"username":username, "password":password}
+        req = requests.post(BASE_URL + f"edu/api/token/",data=payload)
+        if req.status_code == 200: 
+            data = req.json()
+            token = data["access"]
+            request.session["jwt"]=token
+            return redirect ("amuzeshyar:home", student_id=25)
+        else:
+            return HttpResponse("نام کاربری یا رمز عبور معتبر نمی باشد ")      
+    return render(request, "login.html")
