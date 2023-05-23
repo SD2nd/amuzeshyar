@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404
-from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm
-from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance
+from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm
+from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building
 
 # Create your views here.
 
@@ -82,7 +82,7 @@ def class_attendance_form(request):
 
 
 def class_attendance_edit_form(request,id):
-    classAttendance = get_object_or_404(StudentClass, id = id )
+    classAttendance = get_object_or_404(ClassAttendance, id = id )
     form = ClassAttendanceForm(request.POST or None, instance=classAttendance)
     if form.is_valid():
         form.save()
@@ -92,5 +92,47 @@ def class_attendance_edit_form(request,id):
         
     # units information
         
-    return render(request,'home.html', context=context)
+def department_form(request):
+    form = DepartmentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "department_form.html", {"form":form})
 
+def department_edit_form(request,id):
+    department = get_object_or_404(Department, id = id )
+    form = DepartmentForm(request.POST or None, instance=Department)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "departmnet_edit_form.html", {"form":form})
+
+def room_form(request):
+    form = RoomForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "room_form.html", {"form":form})
+
+def room_edit_form(request,id):
+    room = get_object_or_404(Room, id = id )
+    form = RoomForm(request.POST or None, instance=room)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "room_edit_form.html", {"form":form})
+
+def building_form(request):
+    form = BuildingForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "building_form.html", {"form":form})
+
+def building_edit_form(request,id):
+    building = get_object_or_404(Room, id = id )
+    form = BuildingForm(request.POST or None, instance=building)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "building_edit_form.html", {"form":form})

@@ -31,3 +31,22 @@ class ClassAttendanceForm(forms.ModelForm):
     class Meta:
         model = m.ClassAttendance
         fields = "__all__"
+
+class ClassAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = m.ClassAttendance
+        fields = "__all__"
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = m.Department
+        fields = "__all__"
+
+class RoomForm(forms.ModelForm):
+    class Meta:
+        model = m.Room
+        fields = "__all__"
+
+class BuildingForm(forms.ModelForm):
+    class Meta:
+        model = m.Building
+        fields = "__all__"

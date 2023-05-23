@@ -1,4 +1,3 @@
-
 from django.urls import path
 
 
@@ -102,6 +101,10 @@ urlpatterns += [
     path('forms/studentclass', v.student_class_form),
     path('forms/classattendance/<int:id>', v.class_attendance_edit_form),
     path('forms/classattendance', v.class_attendance_form),
+    path('forms/department', v.department_form),
+    path('forms/department/<int:id>', v.department_edit_form),
+    path('forms/room', v.room_form),
+    path('forms/room/<int:id>', v.room_edit_form),
+    path('forms/building', v.building_form),
+    path('forms/building/<int:id>', v.building_edit_form),
 ]
-
-

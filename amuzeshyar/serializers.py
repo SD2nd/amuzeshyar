@@ -149,22 +149,20 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_room_title (self, obj):
         return obj.building.title
 class BuildingSerializer(serializers.ModelSerializer):
-      Building_title = serializers.SerializerMetaclass()
+      
     class Meta: 
         model = m.Building
         fields = "__all__"
-        extra_fields - ["Building_title"]
+        extra_fields = ["Building_title"]
 
-    def get_building (self, obj):
-        return obj.building.title
+    
 class DepartmentSerializer(serializers.ModelSerializer):
-    Department_title = serializers.SerializerMetaclass()
+    
     class Meta:
         model= m.Department
         fields = "__all__"
-        extera_fields = ["Department_title"]
-    def get_Department_title (self, obj):
-        return obj.Department.title
+        extra_fields = ["Department_title"]
+    
 class ConstValueSerializer(serializers.ModelSerializer):
     parent_title = serializers.SerializerMethodField()
     class Meta:
