@@ -233,10 +233,12 @@ class ClassScheduleSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class SpecializationSerializer(serializers.ModelSerializer):
+   major_title = serializers.SerializerMethodField()
    class Meta:
        model = m.Specialization
        fields = "__all__"
-
+   def get_major_title(self, obj):
+       return obj.major.title
 class FirstPageInformationSerializer(serializers.Serializer):
     # basic information 
     firstname = serializers.CharField(source="person.first_name")
