@@ -102,19 +102,31 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = "__all__"    
 
 class RoomSerializer(serializers.ModelSerializer):
+    room_title = serializers.SerializerMethodField()
     class Meta:
         model = m.Room
         fields = "__all__"
+        extra_fields = ["room_title"]
 
+    def get_room_title (self, obj):
+        return obj.building.title
 class BuildingSerializer(serializers.ModelSerializer):
+      Building_title = serializers.SerializerMetaclass()
     class Meta: 
         model = m.Building
         fields = "__all__"
+        extra_fields - ["Building_title"]
 
+    def get_building (self, obj):
+        return obj.building.title
 class DepartmentSerializer(serializers.ModelSerializer):
+    Department_title = serializers.SerializerMetaclass()
     class Meta:
         model= m.Department
         fields = "__all__"
+        extera_fields = ["Department_title"]
+    def get_Department_title (self, obj):
+        return obj.Department.title
 class ConstValueSerializer(serializers.ModelSerializer):
     parent_title = serializers.SerializerMethodField()
     class Meta:
