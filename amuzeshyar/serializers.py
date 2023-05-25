@@ -208,14 +208,33 @@ class StudentPaymentSerializer(serializers.ModelSerializer):
 
 
 class AnnouncementTextSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = m.AnnouncementText
         fields = "__all__"
+
 class AnnouncementSerializer(serializers.ModelSerializer):
+    specific_major_str = serializers.SerializerMethodField()
+    specific_specialization_str = serializers.SerializerMethodField()
+    specific_entry_semester_str = serializers.SerializerMethodField()
+    specific_degree_level_str = serializers.SerializerMethodField()
+    specific_department_str = serializers.SerializerMethodField()
+    specific_student_str = serializers.SerializerMethodField()
     class Meta:
         model = m.Announcement
         fields = "__all__"
-        
+    def get_specific_major_str(self, obj):
+        return obj.specific_major.title if obj.specific_major else None
+    def get_specific_specialization_str(self, obj):
+        return obj.specific_specialization.title if obj.specific_specialization else None
+    def get_specific_entry_semester_str(self, obj):
+        return obj.specific_entry_semester.registration_start_date if obj.specific_entry_semester else None
+    def get_specific_degree_level_str(self, obj):
+        return obj.specific_degree_level.title if obj.specific_degree_level else None
+    def get_specific_department_str(self, obj):
+        return obj.specific_department.title if obj.specific_department else None
+    def get_specific_student_str(self, obj):
+        return (obj.specific_student.person.first_name + " " + obj.specific_student.person.last_name) if obj.specific_student else None
 
 class SemesterSerializer(serializers.ModelSerializer):
     class Meta:

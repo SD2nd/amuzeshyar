@@ -1,6 +1,6 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm
+from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm,AnnouncementForm
 from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building
 
 # Create your views here.
@@ -25,6 +25,22 @@ def fixed_tuition_edit_form(request,id):
         form.save()
         return HttpResponse("SUCCESS")
     return render(request, "fixed_tuition_form.html", {"form":form})
+
+def announcement_form(request):
+    form = AnnouncementForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "announcement_form.html", {"form":form})
+
+def announcement_edit_form(request,id):
+    ann = get_object_or_404(AnnouncementForm, id = id )
+    form = AnnouncementForm(request.POST or None, instance=ann)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "announcement_form.html", {"form":form})
+
 
 
 def load_person_form(request, id):

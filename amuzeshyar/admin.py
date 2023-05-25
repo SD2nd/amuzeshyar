@@ -28,6 +28,12 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ("datetime", "description")
     search_fields = ("datetime", "student_id", "invoice_id")
 
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ("announcement", "specific_major", "specific_specialization", "specific_student", "create_datetime",
+                    "specific_department")
+    list_filter = ("create_datetime", "specific_department", "specific_major", "specific_specialization")
+    search_fields = ("create_datetime", "announcement", "specific_department", "specific_major", "specific_specialization")
+
 
 class SemesterAdmin(admin.ModelAdmin):
     list_display = ("semester_type", "registration_start_date", "year" )
@@ -81,7 +87,7 @@ admin.site.register(m.Building)
 admin.site.register(m.Professor, ProfessorAdmin)
 admin.site.register(m.Course, CourseAdmin)
 admin.site.register(m.Class, ClassAdmin)
-admin.site.register(m.Announcement)
+admin.site.register(m.Announcement,AnnouncementAdmin)
 admin.site.register(m.AnnouncementText)
 admin.site.register(m.SemesterCourseTuition, SemesterCourseTuitionAdmin)
 admin.site.register(m.ClassAttendance, ClassAttendanceAdmin)

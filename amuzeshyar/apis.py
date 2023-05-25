@@ -607,24 +607,84 @@ def StudentInvoice_Detail(request, id):
         invoice.delete()
         return Response(204)
 
+@api_view(['GET', 'POST'])
+def Announcement_List(request):
 
-class AnnouncementText(APIView):
-    def get(self, request, id):
-        qs = m.AnnouncementText.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.AnnouncementTextSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
-    def post(self, request):
+    if request.method == 'GET':
+        qs = m.Announcement.objects.all()
+        serializer = s.AnnouncementSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
         payload = request.data
         if payload:
-            Serialized = s.AnnouncementTextSerializer(data=payload)
-    
-    @api_view(['GET'])
-    def Announcement_List_detail(request):
+            serializer = s.AnnouncementSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def Announcement_Detail(request, id):
+
+    try:
+        ann = m.Announcement.objects.get(pk=id)
+    except m.Announcement.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.AnnouncementSerializer(ann)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.AnnouncementSerializer(ann, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        ann.delete()
+        return Response(204)
+@api_view(['GET', 'POST'])
+def AnnouncementText_List(request):
+
+    if request.method == 'GET':
         qs = m.AnnouncementText.objects.all()
-        serialized = s.AnnouncementTextSerializer(qs, many=True)
-        return Response(serialized.data, 200)
+        serializer = s.AnnouncementTextSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
+        payload = request.data
+        if payload:
+            serializer = s.AnnouncementTextSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def AnnouncementText_Detail(request, id):
+
+    try:
+        ann = m.AnnouncementText.objects.get(pk=id)
+    except m.AnnouncementText.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.AnnouncementTextSerializer(ann)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.AnnouncementTextSerializer(ann, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        ann.delete()
+        return Response(204)
 
 
 class Semester(APIView):
@@ -646,25 +706,23 @@ class Semester(APIView):
         return Response({"msg": "Payload Required"}, 400)
 
     @api_view(['GET'])
-
     def Semester_List_detail(request):
         qs = m.Semester.objects.all()
         serialized = s.SemesterSerializer(qs, many=True)
         return Response(serialized.data, 200)
-    
 
-
-class Announcement(APIView):
+class Semester(APIView):
     def get(self, request, id):
-        qs = m.Announcement.objects.filter(id=id).first()
+        qs = m.Semester.objects.filter(id=id).first()
         if qs:
-            SerializedData = s.AnnouncementSerializer(qs).data
+            SerializedData = s.SemesterSerializer(qs).data
             return Response(SerializedData, status=status.HTTP_200_OK)
         return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
     def post(self, request):
         payload = request.data
         if payload:
-            Serialized = s.AnnouncementSerializer(data=payload)
+            Serialized = s.SemesterSerializer(data=payload)
             if Serialized.is_valid():
                 Serialized.save()
                 return Response(Serialized.data, status=status.HTTP_201_CREATED)
@@ -672,12 +730,11 @@ class Announcement(APIView):
         return Response({"msg": "Payload Required"}, 400)
 
     @api_view(['GET'])
-    def Announcement_List_detail(request):
-        qs = m.Announcement.objects.all()
-        serialized = s.AnnouncementSerializer(qs, many=True)
+    def Semester_List_detail(request):
+        qs = m.Semester.objects.all()
+        serialized = s.SemesterSerializer(qs, many=True)
         return Response(serialized.data, 200)
 
-    
 
 class Specialization(APIView):
     def post(self, request):

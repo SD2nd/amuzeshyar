@@ -76,13 +76,11 @@ urlpatterns = [
          name="get_put_patch_delete_constvalue"),
 
     # Announcement
-    path('api/v1/ann', a.Announcement.Announcement_List_detail),
-    path('api/v1/ann/', a.Announcement.as_view()),
-    path('api/v1/ann/<int:id>', a.Announcement.as_view()),
+    path('api/v1/ann/', a.Announcement_List),
+    path('api/v1/ann/<int:id>', a.Announcement_Detail),
     # AnnouncementText
-    path('api/v1/anntext', a.AnnouncementText.Announcement_List_detail),
-    path('api/v1/anntext/', a.AnnouncementText.as_view()),
-    path('api/v1/anntext/<int:id>', a.AnnouncementText.as_view()),
+    path('api/v1/anntext/', a.AnnouncementText_List),
+    path('api/v1/anntext/<int:id>', a.AnnouncementText_Detail),
 
     # Semester
     path('api/v1/coursetuitions', a.Semester.Semester_List_detail),
@@ -115,6 +113,9 @@ urlpatterns += [
     path('forms/room/<int:id>', v.room_edit_form),
     path('forms/building', v.building_form),
     path('forms/building/<int:id>', v.building_edit_form),
+    path('forms/announcement/<int:id>', v.announcement_edit_form),
+    path('forms/announcement', v.announcement_form),
     path("login", v.login_form)
+
     
 ]

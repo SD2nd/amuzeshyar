@@ -244,21 +244,24 @@ class AnnouncementText(models.Model):
 
 class Announcement(models.Model):
     announcement = models.ForeignKey(
-        AnnouncementText, on_delete=models.SET_NULL, null=True)
+        AnnouncementText,verbose_name="اطلاعیه", on_delete=models.SET_NULL, null=True)
     specific_major = models.ForeignKey(
-        Major, on_delete=models.SET_NULL, null=True)
+        Major, verbose_name="رشته",on_delete=models.SET_NULL, null=True)
     specific_specialization = models.ForeignKey(
-        Specialization, on_delete=models.SET_NULL, null=True)
+        Specialization,verbose_name="تخصص", on_delete=models.SET_NULL, null=True)
     specific_entry_semester = models.ForeignKey(
-        Semester, on_delete=models.SET_NULL, null=True)
+        Semester,verbose_name="نیمسال", on_delete=models.SET_NULL, null=True)
     specific_degree_level = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True)
+        ConstValue,verbose_name="مقطع", on_delete=models.SET_NULL, null=True)
     specific_department = models.ForeignKey(
-        Department, on_delete=models.SET_NULL, null=True)
+        Department,verbose_name="دپارتمان", on_delete=models.SET_NULL, null=True)
     specific_student = models.ForeignKey(
-        Student, on_delete=models.SET_NULL, null=True)
-    create_datetime = models.DateTimeField(auto_now=True)
-    expiration_datetime = models.DateTimeField(null=True, blank=True)
+        Student,verbose_name="دانش آموز", on_delete=models.SET_NULL, null=True)
+    create_datetime = models.DateTimeField(verbose_name="تاریخ انتشار",auto_now=True)
+    expiration_datetime = models.DateTimeField(verbose_name="تاریخ انقضا", null=True, blank=True)
+    def __str__(self) -> str:
+        return f"{self.specific_degree_level.parent.title.__str__()}"
+
 
 
 class Email(models.Model):
