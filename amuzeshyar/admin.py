@@ -66,6 +66,9 @@ class CourseAdmin(admin.ModelAdmin):
 class SemesterCourseTuitionAdmin(admin.ModelAdmin):
     list_display = ("semester","field_of_study", "course_type", "unit_type", "tuition_per_unit",)
 
+class ClassAttendanceAdmin(admin.ModelAdmin):
+    list_display = ("session_number","session","student")
+
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
 admin.site.register(m.Student, StudentAdmin)
@@ -81,7 +84,7 @@ admin.site.register(m.Class, ClassAdmin)
 admin.site.register(m.Announcement)
 admin.site.register(m.AnnouncementText)
 admin.site.register(m.SemesterCourseTuition, SemesterCourseTuitionAdmin)
-admin.site.register(m.ClassAttendance)
+admin.site.register(m.ClassAttendance, ClassAttendanceAdmin)
 admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice, InvoiceAdmin)
 admin.site.register(m.ClassSchedule)
