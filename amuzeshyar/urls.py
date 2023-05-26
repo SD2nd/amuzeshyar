@@ -45,9 +45,11 @@ urlpatterns = [
 
     # Building
     path('api/v1/buildings/', a.Building.as_view()),
+    path('api/v1/buildings/<int:id>', a.Building_List_detail),
 
     # Room
     path('api/v1/rooms/', a.Room.as_view()),
+    path('api/v1/rooms/<str:code>', a.Room_List_detail),
 
     # Department
     path('api/v1/departments/', a.DepartmentList.as_view()),

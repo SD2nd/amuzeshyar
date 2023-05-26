@@ -397,6 +397,34 @@ class Building(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(
+    request=s.BuildingSerializer,
+    responses={
+        status.HTTP_200_OK: s.BuildingSerializer,
+    },
+    tags=["Place"])
+@api_view(['GET', 'PUT', 'DELETE'])
+def Building_List_detail(request, id):
+
+    try:
+        building = m.Building.objects.get(pk=id)
+    except m.Building.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = s.BuildingSerializer(building)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = s.BuildingSerializer(building, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        building.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @extend_schema(tags=["Place"])
 class Room(APIView):
@@ -425,6 +453,34 @@ class Room(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(
+    request=s.RoomSerializer,
+    responses={
+        status.HTTP_200_OK: s.RoomSerializer,
+    },
+    tags=["Place"])
+@api_view(['GET', 'PUT', 'DELETE'])
+def Room_List_detail(request, code):
+
+    try:
+        room = m.Room.objects.get(pk=code)
+    except m.Room.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = s.RoomSerializer(room)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = s.RoomSerializer(room, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        room.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @extend_schema(tags=["Department"])
 class DepartmentList(ListCreateAPIView):
