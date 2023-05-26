@@ -149,11 +149,15 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_room_title (self, obj):
         return obj.building.title
 class BuildingSerializer(serializers.ModelSerializer):
-      
+    building_type = serializers.SerializerMethodField()
     class Meta: 
         model = m.Building
         fields = "__all__"
-        extra_fields = ["Building_title"]
+        extra_fields = ["building_type"]
+    
+    def get_building_type (self, obj):
+        return obj.building_type.title
+    
 
     
 class DepartmentSerializer(serializers.ModelSerializer):
