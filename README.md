@@ -19,7 +19,7 @@ manage.py createsuperuser
 ```
   
   
-  لینک فایل قالب: https://docs.google.com/document/d/1sUVgN4BD3xNiXIDjy9zwzcbAy4yvNgQI/edit?usp=share_link&ouid=114334508568732007670&rtpof=true&sd=true
+  لینک فایل قالب (فایل فشرده): https://drive.google.com/file/d/15nlHpRIfNLMEw4clwFQImrJ_qT7lv2JZ/view?usp=share_link
 # آپدیت - اضافه شدن مستندات API در بستر Swagger
 صفحه مستندات API های توسعه داده شده تا به حال را می توانید پس از اجرا گرفتن از برنامه در آدرس زیر مشاهده و آنها را تست کنید
 
