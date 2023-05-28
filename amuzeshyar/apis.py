@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
@@ -496,6 +497,7 @@ class DepartmentDetail(RetrieveUpdateDestroyAPIView):
 
 @extend_schema(tags=["ConstValue"])
 class ConstValueList(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = m.ConstValue.objects.all()
     serializer_class = s.ConstValueSerializer
 
@@ -864,8 +866,8 @@ class Specialization(APIView):
    def delete(self, request, national_id):
        pass
 
-
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def first_page(request, student_id):
     
     qs = m.Student.objects.filter(id = student_id).first()
