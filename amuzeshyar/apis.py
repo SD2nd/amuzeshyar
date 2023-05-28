@@ -497,7 +497,6 @@ class DepartmentDetail(RetrieveUpdateDestroyAPIView):
 
 @extend_schema(tags=["ConstValue"])
 class ConstValueList(ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = m.ConstValue.objects.all()
     serializer_class = s.ConstValueSerializer
 
