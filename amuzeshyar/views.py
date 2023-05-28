@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm,AnnouncementForm
-from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building
+from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building, Student
 
 # Create your views here.
 
@@ -55,9 +55,14 @@ def load_person_form(request, id):
 def home(request, student_id):
     
     BASE_URL = "http://127.0.0.1:8000/"
-    current_term = request.GET.get("term")
+    current_term = request.GET.get("term") or "012"
     # student personal information
-    req = requests.get(BASE_URL + f"edu/api/v1/panel/{student_id}?term={current_term}")
+    req = requests.get(
+        BASE_URL + f"edu/api/v1/panel/{student_id}?term={current_term}",
+        headers={
+            "Authorization":"Bearer " + request.session.get("jwt") or None,
+        }
+        )
     if req.status_code == 200: 
         data = req.json()
         context = {
@@ -71,8 +76,11 @@ def home(request, student_id):
             "all_term_payed_fee": data["all_term_payed_fee"],
             "all_must_be_paid":data["all_must_be_paid"],
             "debt":data["debt"],
+            "classes_schedule":data["classes_schedule"],
         }
         return render(request,'home.html', context=context)
+    else: 
+        return HttpResponse(f"{req.text}")
 
 def student_class_form(request):
     form = StudentClassForm(request.POST or None)
@@ -147,7 +155,7 @@ def building_form(request):
     return render(request, "building_form.html", {"form":form})
 
 def building_edit_form(request,id):
-    building = get_object_or_404(Room, id = id )
+    building = get_object_or_404(Building, id = id )
     form = BuildingForm(request.POST or None, instance=building)
     if form.is_valid():
         form.save()
@@ -155,18 +163,34 @@ def building_edit_form(request,id):
     return render(request, "building_edit_form.html", {"form":form})
 
 def login_form(request):
-    if request.POST:
-        username = request.POST.get("username")
+    if request.method == "POST":
+        student_id = request.POST.get("student_id")
         password = request.POST.get("password")
-        BASE_URL = "http://127.0.0.1:8000/"
+        
+        student = Student.objects.filter(real_student_id=student_id).first()
+        
+        if not student or not student.auth_user: 
+            return HttpResponse("ERROR- STUDENT NOT FOUND", status=404)
+        username = student.auth_user.username
+        
+        
+        # calling API
         # student personal information
-        payload = {"username":username, "password":password}
+        BASE_URL = "http://127.0.0.1:8000/"
+        payload = {
+            "username":username,
+            "password":password
+            }
         req = requests.post(BASE_URL + f"edu/api/token/",data=payload)
         if req.status_code == 200: 
             data = req.json()
             token = data["access"]
             request.session["jwt"]=token
-            return redirect ("amuzeshyar:home", student_id=25)
-        else:
-            return HttpResponse("نام کاربری یا رمز عبور معتبر نمی باشد ")      
+            return redirect ("amuzeshyar:home", student_id=student.id)
+        elif req.status_code == 403:
+            return HttpResponse("Token is invalid")    
+        elif req.status_code == 401:
+            return HttpResponse("Password is invalid")    
+
+              
     return render(request, "login.html")

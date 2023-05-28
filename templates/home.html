@@ -467,126 +467,32 @@ div{height:100%}
                                   </tr>
 
 
+                                  {%for rec in classes_schedule%}
                                   <tr style="background-color: #fff;">
                                     <td>
-                                      <span> 230</span>
+                                      <span> {{rec.location}} </span>
                                     </td>
                                    
                                     <td>
-                                     <span> 1401/10/10 </span>
+                                     <span>{{rec.exam_date}}</span>
                                    </td>
                                    <td>
-                                     <span>شنبه 12 تا 15</span>
+                                     <span>{{rec.time}}</span>
                                    </td>
                                    <td>
-                                     <span>محمد احمدی  </span>
+                                     <span>{{rec.instructor}}</span>
                                    </td>
                                    <td>
-                                     <span>آمار و احتمال </span>
+                                     <span>{{rec.class_name}}</span>
                                    </td>
                                    <td>
-                                     <span>1</span>
+                                     <span>{{rec.row}}</span>
                                    </td>
                                    
                                    
                                   </tr>
-
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
+                                  {% endfor %}
+                                  
 
                                 </table>
                            

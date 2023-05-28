@@ -140,22 +140,21 @@ class CourseSerializer(serializers.ModelSerializer):
 # 
 
 class RoomSerializer(serializers.ModelSerializer):
-    room_title = serializers.SerializerMethodField()
+    building_title = serializers.SerializerMethodField()
     class Meta:
         model = m.Room
         fields = "__all__"
-        extra_fields = ["room_title"]
 
-    def get_room_title (self, obj):
+    def get_building_title (self, obj):
         return obj.building.title
 class BuildingSerializer(serializers.ModelSerializer):
-    building_type = serializers.SerializerMethodField()
+    building_type_title = serializers.SerializerMethodField()
     class Meta: 
         model = m.Building
         fields = "__all__"
-        extra_fields = ["building_type"]
+
     
-    def get_building_type (self, obj):
+    def get_building_type_title (self, obj):
         return obj.building_type.title
     
 
@@ -280,9 +279,14 @@ class FirstPageInformationSerializer(serializers.Serializer):
     all_term_payed_fee = serializers.SerializerMethodField(method_name="calc_all_term_payed_fee")
     all_must_be_paid = serializers.SerializerMethodField(method_name="calc_all_must_be_paid")
     
+    # class scheduling information
+    classes_schedule = serializers.SerializerMethodField()
+    
     def get_units_passed(self, obj):
         units = 0
         passed_units_qs = m.StudentClass.objects.filter(grade__gte=10).filter(student_id = obj.id)
+        if not passed_units_qs.exists():
+            raise Exception("There is no StudentClass record")
         for record in passed_units_qs:
             units += record.session.course.practical_units + \
                      record.session.course.theory_units 
@@ -291,6 +295,8 @@ class FirstPageInformationSerializer(serializers.Serializer):
     def get_units_taken(self, obj):
         units = 0
         passed_units_qs = m.StudentClass.objects.filter(student_id = obj.id)
+        if not passed_units_qs.exists():
+            raise Exception("There is no StudentClass record")
         for record in passed_units_qs:
             units += record.session.course.practical_units + \
                      record.session.course.theory_units 
@@ -304,16 +310,22 @@ class FirstPageInformationSerializer(serializers.Serializer):
         units = 0
         weighted_sum = 0
         passed_units_qs = m.StudentClass.objects.filter(grade__gte=10).filter(student_id = obj.id)
+        if not passed_units_qs.exists():
+            raise Exception("There is no StudentClass record")
         for record in passed_units_qs:
             this_units = record.session.course.practical_units + \
                          record.session.course.theory_units 
             units += this_units
             weighted_sum += record.grade * this_units
+        
         return round(weighted_sum / units, 2)
-    
+       
+        
     def calc_current_term_payed_fee(self, obj):
         current_term = self.context.get("current_term")
         student_all_pays = m.StudentPayment.objects.filter(student_id = obj.id)
+        if not student_all_pays.exists():
+            return "No payment record found for student"
         current_term_student_payments = []
         for record in student_all_pays:
             if record.semester.semester_code == current_term:
@@ -325,6 +337,8 @@ class FirstPageInformationSerializer(serializers.Serializer):
     
     def calc_all_term_payed_fee(self, obj):
         student_all_pays = m.StudentPayment.objects.filter(student_id = obj.id)
+        if not student_all_pays.exists():
+            return "No payment record found for student"
         all_term_student_payed_amount = 0       
         for record in student_all_pays:
             all_term_student_payed_amount += record.amount
@@ -333,28 +347,82 @@ class FirstPageInformationSerializer(serializers.Serializer):
     def calc_all_must_be_paid(self, obj):
         # fixed term amount
         qs = m.Class.objects.values("semester").distinct()
-        student_fixed_fee = m.FixedTuitionFee.objects.filter(year = obj.entry_year).first().fee
+        if not qs.exists():
+            raise ValueError("There is no class record for student ")
+        student_fixed_fee = m.FixedTuitionFee.objects.filter(year = obj.entry_year).first()
+        if not student_fixed_fee:
+            raise Exception(" There is no FixedTuitionFee record to fetch for this entry year")
         student_terms = len(qs)
-        total_fixed_fee = student_terms*student_fixed_fee
+        total_fixed_fee = student_terms*student_fixed_fee.fee
         
         # course fees
         taken_courses_qs = m.StudentClass.objects.filter(student_id=obj.id) 
+        if not taken_courses_qs.exists():
+            raise Exception("There is no StudentClass record to fetch for this")
         
         course_fees = 0
         for record in taken_courses_qs:
-            fee_per_unit = m.SemesterCourseTuition.objects \
+            try:
+                fee_per_unit = m.SemesterCourseTuition.objects \
                 .filter(course_type = record.session.course.course_type) \
                 .filter(unit_type = record.session.course.units_type) \
                 .filter(semester_id=record.session.semester_id)\
                 .first().tuition_per_unit 
+            except AttributeError:
+                raise Exception("THERE IS NO SemesterCourseTuition VALID FOR THE SELECTED COURSE")
             course_fees += record.session.course.units * fee_per_unit 
         
         # calc debt
         return course_fees + total_fixed_fee
     
+    def get_classes_schedule(self, obj):
+        current_term = self.context.get("current_term")
+        semesters_qs = m.Semester.objects.all()
+        if not semesters_qs.exists():
+            raise Exception("There is no Semester record!!!!!!")
+        term_id = None
+        # getting current term_id
+        for record in semesters_qs:
+            if record.semester_code == current_term:
+                term_id = record.id
+        
+        classes_qs = m.StudentClass.objects.filter(student_id = obj.id, session__semester_id= term_id)
+        if not classes_qs.exists():
+            raise Exception("There is no No class record for this student in this Semester!")
+        
+        day_of_week = {
+            1: "Saturday", 
+            2: "Sunday",
+            3: "Monday",
+            4: "Tuesday",
+            5: "Wednesday",
+            6: "Thursday",
+            7: "Friday",
+        }
+        schedules = []
+        counter = 0
+        for record in classes_qs:
+            counter += 1
+            class_sc =record.session.class_schedule_children.first() 
+            class_time = f"{class_sc.start_at}-{class_sc.end_at} {day_of_week[class_sc.day_of_week]}"
+            class_schedule = {
+                "row": counter,
+                "class_name": record.session.course.title,
+                "instructor": record.session.instructor.__str__(),
+                "time": class_time,
+                "exam_date": record.session.exam_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+                "location": record.session.class_schedule_children.first().location_id
+            }
+            schedules.append(class_schedule)
+        return schedules
+
+    
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["remaining_units"] = rep["total_units"] - rep["units_passed"]
+        try: 
+            rep["remaining_units"] = rep["total_units"] - rep["units_passed"]
+        except Exception as e:
+            rep["remaining_units"] = "Error!"
         rep["fullname"] = rep["firstname"] + " " + rep["lastname"]
         rep["debt"] = rep["all_must_be_paid"] - rep["all_term_payed_fee"]
         return rep
