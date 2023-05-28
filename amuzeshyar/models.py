@@ -1,5 +1,6 @@
 """module docstring"""
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class CharFiledLength:
@@ -175,6 +176,8 @@ class Student(models.Model):
         Major, on_delete=models.SET_NULL, null=True)
     graduation_date = models.DateField(null=True, blank=True)
     entry_year = models.SmallIntegerField(null=True)
+    real_student_id = models.CharField(max_length=20, null=True, blank=True)
+    auth_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self) -> str:
         return self.person.__str__()
@@ -349,7 +352,7 @@ class ClassSchedule(models.Model):
         verbose_name_plural = "زمانهای کلاس"
 
     session = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True,
-        verbose_name = "کلاس")
+        verbose_name = "کلاس", related_name="class_schedule_children")
     day_of_week = models.PositiveSmallIntegerField(verbose_name = "روز هفته")
     start_at = models.TimeField(verbose_name = "زمان شروع")
     end_at = models.TimeField(verbose_name = "زمان پایان")
