@@ -122,20 +122,30 @@ class Major(models.Model):
         return self.title
 
 
+
 class Semester(models.Model):
+    class Meta:
+        verbose_name = "نیمسال آموزشی"
+        verbose_name_plural = "نیمسالهای آموزشی"
+
     semester_type = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True)
-    registration_start_date = models.DateField()
-    registration_end_date = models.DateField()
-    classes_start_date = models.DateField()
-    classes_end_date = models.DateField()
+        ConstValue,
+        on_delete=models.SET_NULL, 
+        null=True,
+        verbose_name="نوع نیمسال آموزشی")
+    registration_start_date = models.DateField(verbose_name="تاریخ شروع ثبت نام")
+    registration_end_date = models.DateField(verbose_name="تاریخ پایان ثبت نام")
+    classes_start_date = models.DateField(verbose_name="تاریخ شروع کلاس")
+    classes_end_date = models.DateField(verbose_name="تاریخ اتمام کلاس")
     registration_modification_start_date = models.DateField(
-        null=True, blank=True)
+        null=True, blank=True,
+        verbose_name="تاریخ شروع حذف و اضافه")
     registration_modification_end_date = models.DateField(
-        null=True, blank=True)
-    exams_start_date = models.DateField()
-    exams_end_date = models.DateField()
-    year = models.PositiveSmallIntegerField()
+        null=True, blank=True,
+        verbose_name="تاریخ اتمام حذف و اضافه")
+    exams_start_date = models.DateField(verbose_name="تاریخ شروع امتحانات")
+    exams_end_date = models.DateField(verbose_name="تاریخ اتمام امتحانات")
+    year = models.PositiveSmallIntegerField(verbose_name="سال تحصیلی")
 
     def __str__(self):
         return f"{self.year} {self.semester_type.__str__()}"
@@ -210,13 +220,21 @@ class Course(models.Model):
         return self.practical_units + self.theory_units
 
 class Class(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
+    class Meta:
+        verbose_name = "کلاس"
+        verbose_name_plural = "کلاسها"
+
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True,
+        verbose_name = "درس")
     instructor = models.ForeignKey(
-        Professor, on_delete=models.SET_NULL, null=True)
-    capacity = models.PositiveSmallIntegerField(default=15)
+        Professor, on_delete=models.SET_NULL, null=True,
+        verbose_name = "استاد")
+    capacity = models.PositiveSmallIntegerField(default=15,
+        verbose_name = "ظرفیت کلاس")
     semester = models.ForeignKey(
-        Semester, on_delete=models.SET_NULL, null=True)
-    exam_datetime = models.DateTimeField()
+        Semester, on_delete=models.SET_NULL, null=True,
+        verbose_name = "نیمسال")
+    exam_datetime = models.DateTimeField(verbose_name = "تاریخ امتحان")
 
     def __str__(self) -> str:
         return f"{self.course.__str__()} {self.instructor.__str__()} {self.semester.__str__()}"
@@ -326,11 +344,17 @@ class MajorSpecializationDepartment(models.Model):
 
 
 class ClassSchedule(models.Model):
-    session = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
-    day_of_week = models.PositiveSmallIntegerField()
-    start_at = models.TimeField()
-    end_at = models.TimeField()
-    location = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
+    class Meta:
+        verbose_name = "زمانبندی کلاس"
+        verbose_name_plural = "زمانهای کلاس"
+
+    session = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True,
+        verbose_name = "کلاس")
+    day_of_week = models.PositiveSmallIntegerField(verbose_name = "روز هفته")
+    start_at = models.TimeField(verbose_name = "زمان شروع")
+    end_at = models.TimeField(verbose_name = "زمان پایان")
+    location = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True,
+        verbose_name = "مکان")
 
     def __str__(self) -> str:
         return f"{self.session.__str__()} \
