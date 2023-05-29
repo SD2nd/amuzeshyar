@@ -746,7 +746,7 @@ def AnnouncementText_Detail(request, id):
         ann.delete()
         return Response(204)
 
-
+@extend_schema(tags=["Semester"])
 class Semester(APIView):
     def get(self, request, id):
         qs = m.Semester.objects.filter(id=id).first()
@@ -784,6 +784,82 @@ class Semester(APIView):
     def patch(self, request, id):
         pass
 
+@extend_schema(tags=["Class"])
+class Class(APIView):
+    def get(self, request, id):
+        qs = m.Class.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.ClassSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.ClassSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def Class_List_detail(request):
+        qs = m.Class.objects.all()
+        serialized = s.ClassSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+    
+    def delete(self, request, id):
+        qs = m.Class.objects.filter(id=id).first()
+        if qs:
+            qs.delete()
+            return Response({"msg": "deleted"}, status.HTTP_200_OK)
+        return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, id):
+        pass
+
+    def patch(self, request, id):
+        pass
+
+
+@extend_schema(tags=["ClassSchedule"])
+class ClassSchedule(APIView):
+    def get(self, request, id):
+        qs = m.ClassSchedule.objects.filter(id=id).first()
+        if qs:
+            SerializedData = s.ClassScheduleSerializer(qs).data
+            return Response(SerializedData, status=status.HTTP_200_OK)
+        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        payload = request.data
+        if payload:
+            Serialized = s.ClassScheduleSerializer(data=payload)
+            if Serialized.is_valid():
+                Serialized.save()
+                return Response(Serialized.data, status=status.HTTP_201_CREATED)
+            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Payload Required"}, 400)
+
+    @api_view(['GET'])
+    def ClassSchedule_List_detail(request):
+        qs = m.ClassSchedule.objects.all()
+        serialized = s.ClassScheduleSerializer(qs, many=True)
+        return Response(serialized.data, 200)
+    
+    def delete(self, request, id):
+        qs = m.ClassSchedule.objects.filter(id=id).first()
+        if qs:
+            qs.delete()
+            return Response({"msg": "deleted"}, status.HTTP_200_OK)
+        return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, id):
+        pass
+
+    def patch(self, request, id):
+        pass
 
 class Specialization(APIView):
     def post(self, request):
