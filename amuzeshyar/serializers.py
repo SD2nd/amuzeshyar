@@ -106,20 +106,24 @@ class StudentClassSerializer(serializers.ModelSerializer):
         fields = "__all__"    
 
 class CourseSerializer(serializers.ModelSerializer): 
-    course_type_title = serializers.SerializerMethodField()
-    #degree_level_title = serializers.SerializerMethodField()
+    # course_type_title = serializers.SerializerMethodField()
+    # degree_level_title = serializers.SerializerMethodField()
+    # specialization = serializers.SerializerMethodField()
     
     class Meta:
         model = m.Course
         fields = "__all__" 
-        # extra_fields = ["course_type_title"] 
-        # extra_fields = []  
-        
-    def get_course_type_title (self, obj):
-            return obj.course_type.title
+        # extra_fields = ["course_type_title","degree_level_title"] 
+        #depth = 1
+                
+        # def get_course_type_title (self, obj):
+        #      return obj.course_type.title
     
-#def get_degree_level_title (self, obj):
-       # return obj.degree_level.title
+        # def get_degree_level_title (self, obj):
+        #     return obj.degree_level.title
+    
+        # def get_specialization(self, obj):
+        #  return obj.specialization.title
 # 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:

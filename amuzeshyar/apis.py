@@ -369,6 +369,9 @@ class Course_list(APIView):
         serialized = s.CourseSerializer(queryset, many=True)
         return Response(serialized.data, status.HTTP_200_OK)
 
+class CourseDetail(RetrieveUpdateDestroyAPIView):
+   queryset = m.Course.objects.all()
+   serializer_class = s.CourseSerializer
 
 @extend_schema(tags=["Place"])
 class Building(APIView):

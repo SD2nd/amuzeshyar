@@ -36,6 +36,9 @@ urlpatterns = [
     # Course
     path('api/v1/Course/', a.Course_list.as_view(),
          name="get_class_attenndanceList"),
+     
+     path('api/v1/Course/<int:pk>', a.CourseDetail.as_view(),
+         name="get_class_attenndanceList"), 
 
     # Building
     path('api/v1/buildings/', a.Building.as_view()),
