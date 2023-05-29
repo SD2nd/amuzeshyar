@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm,AnnouncementForm, CourseTuitionForm, PaymentForm, InvoiceForm
-from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building, Student, SemesterCourseTuition, StudentPayment, StudentInvoice
+from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm,SemesterForm,ClassForm,ClassScheduleForm, BuildingForm,AnnouncementForm, CourseTuitionForm, PaymentForm, InvoiceForm
+from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room,Semester,Class,ClassSchedule, Building, Student, SemesterCourseTuition, StudentPayment, StudentInvoice
 
 # Create your views here.
 
@@ -191,6 +191,50 @@ def room_edit_form(request,id):
         form.save()
         return HttpResponse("SUCCESS")
     return render(request, "room_edit_form.html", {"form":form})
+
+def semester_form(request):
+    form = SemesterForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "semester_form.html", {"form":form})
+
+def semester_edit_form(request,id):
+    room = get_object_or_404(Semester, id = id )
+    form = SemesterForm(request.POST or None, instance=room)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "semester_form.html", {"form":form})
+def class_form(request):
+    form = ClassForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "class_form.html", {"form":form})
+
+def class_edit_form(request,id):
+    room = get_object_or_404(Class, id = id )
+    form = ClassForm(request.POST or None, instance=room)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "class_form.html", {"form":form})
+
+def classSchedule_form(request):
+    form = ClassScheduleForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "classSch_form.html", {"form":form})
+
+def classSchedule_edit_form(request,id):
+    classSch = get_object_or_404(ClassSchedule, id = id )
+    form = ClassScheduleForm(request.POST or None, instance=classSch)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "classSch_form.html", {"form":form})
 
 def building_form(request):
     form = BuildingForm(request.POST or None)

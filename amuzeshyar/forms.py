@@ -40,6 +40,14 @@ class SemesterForm(forms.ModelForm):
     class Meta:
         model = m.Semester
         fields = "__all__"
+class ClassForm(forms.ModelForm):
+    class Meta:
+        model = m.Class
+        fields = "__all__"
+class ClassScheduleForm(forms.ModelForm):
+    class Meta:
+        model = m.ClassSchedule
+        fields = "__all__"
 
 
 class SpecializationForm(forms.ModelForm):
