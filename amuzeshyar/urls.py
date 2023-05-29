@@ -88,9 +88,9 @@ urlpatterns = [
     path('api/v1/anntext/<int:id>', a.AnnouncementText_Detail),
 
     # Semester
-    path('api/v1/coursetuitions', a.Semester.Semester_List_detail),
-    path('api/v1/coursetuitions/', a.Semester.as_view()),
-    path('api/v1/coursetuitions/<int:id>', a.Semester.as_view()),
+    path('api/v1/semesters', a.Semester.Semester_List_detail),
+    path('api/v1/semesters/', a.Semester.as_view()),
+    path('api/v1/semesters/<int:id>', a.Semester.as_view()),
     
     path('api/v1/panel/<int:student_id>',a.first_page ),
 
