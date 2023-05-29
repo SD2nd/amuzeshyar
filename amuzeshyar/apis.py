@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
@@ -247,7 +248,7 @@ def ClassAttendance_List(request):
         # return json
         classAttendances = m.ClassAttendance.objects.all()
         serializer = s.ClassAttendanceSerializer(classAttendances, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     if request.method == 'POST':
         serializer = s.ClassAttendanceSerializer(data=request.data)
@@ -302,7 +303,7 @@ def StudentClass_list(request):
     if request.method == 'GET':
         studentClass = m.StudentClass.objects.all()
         serializer = s.StudentClassSerializer(studentClass, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     if request.method == 'POST':
         serializer = s.StudentClassSerializer(data=request.data)
@@ -400,6 +401,34 @@ class Building(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(
+    request=s.BuildingSerializer,
+    responses={
+        status.HTTP_200_OK: s.BuildingSerializer,
+    },
+    tags=["Place"])
+@api_view(['GET', 'PUT', 'DELETE'])
+def Building_List_detail(request, id):
+
+    try:
+        building = m.Building.objects.get(pk=id)
+    except m.Building.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = s.BuildingSerializer(building)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = s.BuildingSerializer(building, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        building.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @extend_schema(tags=["Place"])
 class Room(APIView):
@@ -428,6 +457,34 @@ class Room(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(
+    request=s.RoomSerializer,
+    responses={
+        status.HTTP_200_OK: s.RoomSerializer,
+    },
+    tags=["Place"])
+@api_view(['GET', 'PUT', 'DELETE'])
+def Room_List_detail(request, code):
+
+    try:
+        room = m.Room.objects.get(pk=code)
+    except m.Room.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = s.RoomSerializer(room)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = s.RoomSerializer(room, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        room.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @extend_schema(tags=["Department"])
 class DepartmentList(ListCreateAPIView):
@@ -452,93 +509,242 @@ class ConstValueDetail(RetrieveUpdateDestroyAPIView):
     queryset = m.ConstValue.objects.all()
     serializer_class = s.ConstValueSerializer
 
-class FixedTuitionFee(APIView):
-    def get(self, request, id):
-        qs = m.FixedTuitionFee.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.FixedTuitionFeeSerializer(qs).data
-            return Response(SerializedData, 200)
-        return Response({"msg": "Not found"}, 404)
-    def post(self, request):
-        payload = request.data
-        if payload:
-            Serialized = s.FixedTuitionFeeSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, 201)
-            return Response(Serialized.errors, 400)
-        return Response({"msg": "Payload Required"}, 400)
 
+@api_view(['GET', 'POST'])
+def FixedTuitionFee_List(request):
 
-    @api_view(['GET'])
-    def FixedTuitionFee_List_detail(request):
+    if request.method == 'GET':
         qs = m.FixedTuitionFee.objects.all()
-        serialized = s.FixedTuitionFeeSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-class SemesterCourseTuition(APIView):
-    def get(self, request, id):
-        qs = m.SemesterCourseTuition.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.SemesterCourseTuitionSerializer(qs).data
-            return Response(SerializedData, 200)
-        return Response({"msg": "Not found"}, 404)
-
-    def post(self, request):
+        serializer = s.FixedTuitionFeeSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
         payload = request.data
         if payload:
-            serialized = s.SemesterCourseTuitionSerializer(data=payload)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, 201)
-            return Response(serialized.errors, 400)
+            serializer = s.FixedTuitionFeeSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
         return Response({"msg": "Payload Required"}, 400)
 
-    @api_view(['GET'])
-    def SemesterCourseTuition_List_detail(request):
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def FixedTuitionFee_Detail(request, id):
+
+    try:
+        fee = m.FixedTuitionFee.objects.get(pk=id)
+    except m.FixedTuitionFee.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.FixedTuitionFeeSerializer(fee)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.FixedTuitionFeeSerializer(fee, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        fee.delete()
+        return Response(204)
+@api_view(['GET', 'POST'])
+def SemesterCourseTuition_List(request):
+
+    if request.method == 'GET':
         qs = m.SemesterCourseTuition.objects.all()
-        serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-class StudentInvoice(APIView):
-    def get(self, request, id):
-        qs = m.StudentInvoice.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.StudentInvoiceSerializer(qs).data
-            return Response(SerializedData, 200)
-        return Response({"msg": "Not found"}, 404)
-
-    def post(self, request):
+        serializer = s.SemesterCourseTuitionSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
         payload = request.data
         if payload:
-            Serialized = s.StudentInvoiceSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, 201)
-            return Response(Serialized.errors, 400)
+            serializer = s.SemesterCourseTuitionSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
         return Response({"msg": "Payload Required"}, 400)
 
-    @api_view(['GET'])
-    def StudentInvoice_List_detail(request):
-        qs = m.StudentInvoice.objects.all()
-        serialized = s.SemesterCourseTuitionSerializer(qs, many=True)
-        return Response(serialized.data, 200)
 
-class AnnouncementText(APIView):
-    def get(self, request, id):
-        qs = m.AnnouncementText.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.AnnouncementTextSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
-    def post(self, request):
+@api_view(['GET', 'PUT', 'DELETE'])
+def SemesterCourseTuition_Detail(request, id):
+
+    try:
+        tuition = m.SemesterCourseTuition.objects.get(pk=id)
+    except m.SemesterCourseTuition.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.SemesterCourseTuitionSerializer(tuition)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.SemesterCourseTuitionSerializer(tuition, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        tuition.delete()
+        return Response(204)
+@api_view(['GET', 'POST'])
+def StudentPayment_List(request):
+
+    if request.method == 'GET':
+        qs = m.StudentPayment.objects.all()
+        serializer = s.StudentPaymentSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
         payload = request.data
         if payload:
-            Serialized = s.AnnouncementTextSerializer(data=payload)
-    
-    @api_view(['GET'])
-    def Announcement_List_detail(request):
+            serializer = s.StudentPaymentSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def StudentPayment_Detail(request, id):
+
+    try:
+        payment = m.StudentPayment.objects.get(pk=id)
+    except m.StudentPayment.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.StudentPaymentSerializer(payment)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.StudentPaymentSerializer(payment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        payment.delete()
+        return Response(204)
+@api_view(['GET', 'POST'])
+def StudentInvoice_List(request):
+
+    if request.method == 'GET':
+        qs = m.StudentInvoice.objects.all()
+        serializer = s.StudentInvoiceSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
+        payload = request.data
+        if payload:
+            serializer = s.StudentInvoiceSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def StudentInvoice_Detail(request, id):
+
+    try:
+        invoice = m.StudentInvoice.objects.get(pk=id)
+    except m.StudentInvoice.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.StudentInvoiceSerializer(invoice)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.StudentInvoiceSerializer(invoice, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        invoice.delete()
+        return Response(204)
+
+@api_view(['GET', 'POST'])
+def Announcement_List(request):
+
+    if request.method == 'GET':
+        qs = m.Announcement.objects.all()
+        serializer = s.AnnouncementSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
+        payload = request.data
+        if payload:
+            serializer = s.AnnouncementSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def Announcement_Detail(request, id):
+
+    try:
+        ann = m.Announcement.objects.get(pk=id)
+    except m.Announcement.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.AnnouncementSerializer(ann)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.AnnouncementSerializer(ann, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        ann.delete()
+        return Response(204)
+@api_view(['GET', 'POST'])
+def AnnouncementText_List(request):
+
+    if request.method == 'GET':
         qs = m.AnnouncementText.objects.all()
-        serialized = s.AnnouncementTextSerializer(qs, many=True)
-        return Response(serialized.data, 200)
+        serializer = s.AnnouncementTextSerializer(qs, many=True)
+        return Response(serializer.data, 200)
+    if request.method == 'POST':
+        payload = request.data
+        if payload:
+            serializer = s.AnnouncementTextSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, 201)
+            return Response(serializer.errors, 400)
+        return Response({"msg": "Payload Required"}, 400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def AnnouncementText_Detail(request, id):
+
+    try:
+        ann = m.AnnouncementText.objects.get(pk=id)
+    except m.AnnouncementText.DoesNotExist:
+        return Response(404)
+    if request.method == 'GET':
+        serializer = s.AnnouncementTextSerializer(ann)
+        return Response(serializer.data)
+        pass
+    elif request.method == 'PUT':
+        serializer = s.AnnouncementTextSerializer(ann, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, 201)
+        return  Response(serializer.errors, 400)
+        pass
+    elif request.method == 'DELETE':
+        ann.delete()
+        return Response(204)
 
 
 class Semester(APIView):
@@ -560,35 +766,102 @@ class Semester(APIView):
         return Response({"msg": "Payload Required"}, 400)
 
     @api_view(['GET'])
-
     def Semester_List_detail(request):
         qs = m.Semester.objects.all()
         serialized = s.SemesterSerializer(qs, many=True)
         return Response(serialized.data, 200)
     
-
-
-class Announcement(APIView):
-    def get(self, request, id):
-        qs = m.Announcement.objects.filter(id=id).first()
+    def delete(self, request, id):
+        qs = m.Semester.objects.filter(id=id).first()
         if qs:
-            SerializedData = s.AnnouncementSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+            qs.delete()
+            return Response({"msg": "deleted"}, status.HTTP_200_OK)
+        return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, id):
+        pass
+
+    def patch(self, request, id):
+        pass
+
+
+class Specialization(APIView):
     def post(self, request):
-        payload = request.data
-        if payload:
-            Serialized = s.AnnouncementSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, status=status.HTTP_201_CREATED)
-            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"msg": "Payload Required"}, 400)
+        data = request.data
+        if data:
+            serialized = s.SpecializationSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
-    @api_view(['GET'])
-    def Announcement_List_detail(request):
-        qs = m.Announcement.objects.all()
-        serialized = s.AnnouncementSerializer(qs, many=True)
-        return Response(serialized.data, 200)
+    def get(self, request):
+        try:
+            queryset = m.SpecializationModel.objects.all()
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = s.SpecializationSerializer(queryset,many=True)
+        return Response(serialized.data, status.HTTP_200_OK)
 
+    def delete(self, request, national_id):
+        qs = m.Person.objects.filter(national_id=national_id).first()
+        if qs:
+            qs.delete()
+            return Response({"msg": "deleted"}, status.HTTP_200_OK)
+        return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, national_id):
+        pass
+
+    def patch(self, request, national_id):
+        pass
+
+    def delete(self, request, national_id):
+        pass
+
+
+
+class Specialization(APIView):
+   def post(self, request):
+       data = request.data
+       if data:
+           serialized = s.SpecializationSerializer(data=data)
+           if serialized.is_valid():
+               serialized.save()
+               return Response(serialized.data, status.HTTP_201_CREATED)
+           return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+       return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
+
+   def get(self, request):
+       try:
+           queryset = m.Specialization.objects.all()
+       except ObjectDoesNotExist:
+           return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+       serialized = s.SpecializationSerializer(queryset,many=True)
+       return Response(serialized.data, status.HTTP_200_OK)
+
+   def delete(self, request, national_id):
+       qs = m.Person.objects.filter(national_id=national_id).first()
+       if qs:
+           qs.delete()
+           return Response({"msg": "deleted"}, status.HTTP_200_OK)
+       return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
+
+   def put(self, request, national_id):
+       pass
+
+   def patch(self, request, national_id):
+       pass
+
+   def delete(self, request, national_id):
+       pass
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def first_page(request, student_id):
+    
+    qs = m.Student.objects.filter(id = student_id).first()
+    serialized_data = s.FirstPageInformationSerializer(qs, context={"current_term":request.query_params.get("term")})
+    return Response(serialized_data.data, status.HTTP_200_OK)
     

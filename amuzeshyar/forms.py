@@ -10,8 +10,47 @@ class FixedTuitionForm(forms.ModelForm):
     class Meta:
         model = m.FixedTuitionFee
         fields = "__all__"
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = m.Announcement
+        fields = "__all__"
 
 class SemesterForm(forms.ModelForm):
     class Meta:
         model = m.Semester
-        fields = "__all__"        
+        fields = "__all__"
+
+
+class SpecializationForm(forms.ModelForm):
+    class Meta:
+        model = m.Specialization
+        fields = "__all__"
+
+class StudentClassForm(forms.ModelForm):
+    class Meta:
+        model = m.StudentClass
+        fields = "__all__"
+
+class ClassAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = m.ClassAttendance
+        fields = "__all__"
+
+class ClassAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = m.ClassAttendance
+        fields = "__all__"
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = m.Department
+        fields = "__all__"
+
+class RoomForm(forms.ModelForm):
+    class Meta:
+        model = m.Room
+        fields = "__all__"
+
+class BuildingForm(forms.ModelForm):
+    class Meta:
+        model = m.Building
+        fields = "__all__"

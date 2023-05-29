@@ -253,8 +253,8 @@ div{height:100%}
                         <td style="text-align: right;width:120px;">
                             <br>
           <table dir="rtl" style="width:300px ;">
-              <tr><td rowspan="2"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXhjfj_j3r2PJqhnbhdnYKEZ9uxMe3URVhOgAMd11ES5yyDGDvqgMBFpiaeMExgojUMZE&usqp=CAU" style="width:50px;height:50px; " ></td><td> <span> سروش کلانتریان </span> </td></tr>
-              <tr> <td style="width:200px ;"><span>165338768</span></td></tr>
+              <tr><td rowspan="2"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXhjfj_j3r2PJqhnbhdnYKEZ9uxMe3URVhOgAMd11ES5yyDGDvqgMBFpiaeMExgojUMZE&usqp=CAU" style="width:50px;height:50px; " ></td><td> <span> {{fullname}} </span> </td></tr>
+              <tr> <td style="width:200px ;"><span>{{major}}</span></td></tr>
             </table>
                         </td>
                      </tr>
@@ -305,7 +305,7 @@ div{height:100%}
   <tr>
    <td colspan=3  style="text-align: center;background-color:#eee;">
        <table style="width: 100%;"> 
-        <tr> <td style="text-align: center;width:200px ;"><span> 1/800/000/000 تومان </span> </td> <td></td>  <td style="text-align: center;"> <span>کل مبلغ پرداخت ترم جاری</span> </td></tr>
+        <tr> <td style="text-align: center;width:200px ;"><span>{{current_term_payed_fee}} تومان</span> </td> <td></td>  <td style="text-align: center;"> <span>مبلغ پرداخت شده ترم جاری</span> </td></tr>
       </table>
    </td>
  
@@ -313,7 +313,7 @@ div{height:100%}
  <tr>
    <td colspan=3 style="text-align: center;background-color:#eee;">
     <table style="width: 100%;"> 
-      <tr> <td style="text-align: center;width:200px"><span> 1/800/000/000 تومان </span> </td> <td></td>  <td style="text-align: center;"> <span>مبلغ پرداخت شده </span> </td></tr>
+      <tr> <td style="text-align: center;width:200px"><span>{{all_term_payed_fee}} تومان</span> </td> <td></td>  <td style="text-align: center;"> <span>مبلغ پرداخت شده کل  </span> </td></tr>
    </table>
   </td>
  </tr>
@@ -321,7 +321,7 @@ div{height:100%}
   <td colspan=3  style="text-align: center;background-color:#eee;">
     <Center>
    <table style="width: 100%;"> 
-    <tr> <td style="text-align: center;width:200px"><span> 1/800/000/000 تومان </span> </td> <td></td>  <td style="text-align: center;"> <span>مبلغ بدهی </span> </td></tr>
+    <tr> <td style="text-align: center;width:200px"><span> {{debt}} تومان </span> </td> <td></td>  <td style="text-align: center;"> <span>مبلغ بدهی </span> </td></tr>
   </table>
     </Center>
  </td>
@@ -346,17 +346,17 @@ div{height:100%}
    <tr>
     <td >
       <Center>
-      <table style="text-align: center;background-color: #eee;"><tr><td> <center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px; margin-top: 10px;"><span id="modelkolv">18.5</span></div></center></td></tr><tr><td style="height: 30px;"><span style="font-size: smaller;margin-bottom: 10px;">معدل کل تاکنون</span></td></tr></table>  
+      <table style="text-align: center;background-color: #eee;"><tr><td> <center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px; margin-top: 10px;"><span id="modelkolv">{{gpa}}</span></div></center></td></tr><tr><td style="height: 30px;"><span style="font-size: smaller;margin-bottom: 10px;">معدل کل تاکنون</span></td></tr></table>  
     </Center>
     </td>
     <td>
          <center>
-      <table style="text-align: center;background-color: #eee;"><tr><td><center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px;margin-top: 10px;"><span id="vahedpassshodeh">18.5</span></div></center></td></tr><tr><td><span style="font-size: smaller;">واحد پاس شده</span></td></tr></table>  
+      <table style="text-align: center;background-color: #eee;"><tr><td><center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px;margin-top: 10px;"><span id="vahedpassshodeh">{{units_passed}}</span></div></center></td></tr><tr><td><span style="font-size: smaller;">واحد پاس شده</span></td></tr></table>  
     </center>
     </td>
     <td>
  <center>
-      <table style="text-align: center;background-color: #eee;"><tr><td><center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px;margin-top: 10px;"><span id="vahedbardashteshodeh">18.5</span></div></center></td></tr><tr><td><span style="font-size: smaller;">واحد برداشته شده </span></td></tr></table>  
+      <table style="text-align: center;background-color: #eee;"><tr><td><center><div id="Modelkol" style="width: 200px;background-color: #eee;font-size: large;height: 50px;width: 80px;margin-top: 10px;"><span id="vahedbardashteshodeh">{{units_taken}}</span></div></center></td></tr><tr><td><span style="font-size: smaller;">واحد برداشته شده </span></td></tr></table>  
     </center>
     </td>
   </tr>
@@ -467,126 +467,32 @@ div{height:100%}
                                   </tr>
 
 
+                                  {%for rec in classes_schedule%}
                                   <tr style="background-color: #fff;">
                                     <td>
-                                      <span> 230</span>
+                                      <span> {{rec.location}} </span>
                                     </td>
                                    
                                     <td>
-                                     <span> 1401/10/10 </span>
+                                     <span>{{rec.exam_date}}</span>
                                    </td>
                                    <td>
-                                     <span>شنبه 12 تا 15</span>
+                                     <span>{{rec.time}}</span>
                                    </td>
                                    <td>
-                                     <span>محمد احمدی  </span>
+                                     <span>{{rec.instructor}}</span>
                                    </td>
                                    <td>
-                                     <span>آمار و احتمال </span>
+                                     <span>{{rec.class_name}}</span>
                                    </td>
                                    <td>
-                                     <span>1</span>
+                                     <span>{{rec.row}}</span>
                                    </td>
                                    
                                    
                                   </tr>
-
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
-
-                                  <tr style="background-color: #fff;">
-                                    <td>
-                                      <span> 230</span>
-                                    </td>
-                                   
-                                    <td>
-                                     <span> 1401/10/10 </span>
-                                   </td>
-                                   <td>
-                                     <span>شنبه 12 تا 15</span>
-                                   </td>
-                                   <td>
-                                     <span>محمد احمدی  </span>
-                                   </td>
-                                   <td>
-                                     <span>آمار و احتمال </span>
-                                   </td>
-                                   <td>
-                                     <span>1</span>
-                                   </td>
-                                   
-                                   
-                                  </tr>
+                                  {% endfor %}
+                                  
 
                                 </table>
                            
