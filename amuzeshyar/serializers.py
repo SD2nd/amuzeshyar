@@ -276,20 +276,50 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     def get_specific_student_str(self, obj):
         return (obj.specific_student.person.first_name + " " + obj.specific_student.person.last_name) if obj.specific_student else None
 
-class SemesterSerializer(serializers.ModelSerializer):
+
+
+
+class SemesterSerializer(serializers.ModelSerializer): 
+    semester_type_title = serializers.SerializerMethodField()
+    def get_semester_type_title(self, obj):
+       return obj.semester_type.title if obj.semester_type else None
     class Meta:
         model = m.Semester
         fields = "__all__"
         
 class ClassSerializer(serializers.ModelSerializer):
+    course_title = serializers.SerializerMethodField()
+    instructor_title = serializers.SerializerMethodField()
+    semester_title = serializers.SerializerMethodField()
+
     class Meta:
         model = m.Class
         fields = "__all__"
-        
+    def get_course_title(self, obj):
+       return obj.course.title if obj.course else None
+    def get_instructor_title(self, obj):
+       return (obj.instructor.person.first_name + " " + obj.instructor.person.last_name) if obj.instructor else None
+    def get_semester_title(self, obj):
+       return f"{obj.semester.year} {obj.semester.semester_type.__str__()}" if obj.semester else None
+     
 class ClassScheduleSerializer(serializers.ModelSerializer):
+    session_title = serializers.SerializerMethodField()
     class Meta:
         model = m.ClassSchedule
         fields = "__all__"
+    def get_session_title(self, obj):
+       return f"{obj.session.__str__()}" if obj.session else None  
+
+
+
+
+
+
+
+
+
+
+
 
 class SpecializationSerializer(serializers.ModelSerializer):
    major_title = serializers.SerializerMethodField()
