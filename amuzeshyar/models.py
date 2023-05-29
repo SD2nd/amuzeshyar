@@ -386,28 +386,28 @@ class FixedTuitionFee(models.Model):
         return f"{self.semester.__str__()} {self.field_of_study.__str__()} {self.year}"
 
 class StudentInvoice(models.Model):
-    description = models.CharField(max_length=CharFiledLength.long_title)
-    creation_date = models.DateField()
-    is_payed = models.BooleanField(default=False)
+    description = models.CharField(verbose_name="توضیحات",max_length=CharFiledLength.long_title)
+    creation_date = models.DateField(verbose_name="تاریخ انتشار",)
+    is_payed = models.BooleanField(verbose_name="وضعیت پرداخت", default=False)
     semester = models.ForeignKey(
-        Semester, on_delete=models.SET_NULL, null=True)
-    indebtedness = models.IntegerField()
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+        Semester, verbose_name="ترم", on_delete=models.SET_NULL, null=True)
+    indebtedness = models.IntegerField(verbose_name="بدهی",)
+    student = models.ForeignKey(Student,verbose_name="نام دانشجو", on_delete=models.SET_NULL, null=True)
     def __str__(self) -> str:
         return f"{self.indebtedness}"
 
 
 class StudentPayment(models.Model):
-    datetime = models.DateTimeField(auto_now_add=True)
-    semester = models.ForeignKey(Semester, on_delete=models.SET, null=True)
-    amount = models.IntegerField()
-    payment_gateway = models.CharField(max_length=CharFiledLength.short_title)
+    datetime = models.DateTimeField(verbose_name="تاریخ", auto_now_add=True)
+    semester = models.ForeignKey(Semester, verbose_name="ترم", on_delete=models.SET, null=True)
+    amount = models.IntegerField(verbose_name="مبلغ",)
+    payment_gateway = models.CharField(verbose_name="درگاه پرداخت", max_length=CharFiledLength.short_title)
     reference_code = models.CharField(
-        max_length=CharFiledLength.long_title, null=True, blank=True)
-    is_succeeded = models.BooleanField(default=True)
+        verbose_name="کد ارجاع", max_length=CharFiledLength.long_title, null=True, blank=True)
+    is_succeeded = models.BooleanField(verbose_name="وضعیت انجام تراکنش",default=True)
     invoice = models.ForeignKey(
-        StudentInvoice, on_delete=models.SET_NULL, null=True, blank=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+        StudentInvoice, verbose_name="توضیحات صورتحساب", on_delete=models.SET_NULL, null=True, blank=True)
+    student = models.ForeignKey(Student,verbose_name="نام دانشجو", on_delete=models.SET_NULL, null=True)
     
 
 

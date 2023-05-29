@@ -181,10 +181,17 @@ class ConstValueSerializer(serializers.ModelSerializer):
 
 
 class FixedTuitionFeeSerializer(serializers.ModelSerializer):
+    field_of_study_str = serializers.SerializerMethodField()
+    semester_str = serializers.SerializerMethodField()
+
     class Meta:
         model = m.FixedTuitionFee
         fields = "__all__"
 
+    def get_field_of_study_str(self, obj):
+        return  obj.field_of_study.title if obj.field_of_study else None
+    def get_semester_str(self, obj):
+        return  obj.semester.registration_start_date if obj.semester else None
 
 class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
     course_type_str = serializers.SerializerMethodField()
@@ -194,6 +201,7 @@ class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.SemesterCourseTuition
         fields = "__all__"
+
     def get_course_type_str(self, obj):
         return obj.course_type.title if obj.course_type else None
     def get_field_of_study_str(self, obj):
@@ -203,15 +211,34 @@ class SemesterCourseTuitionSerializer(serializers.ModelSerializer):
 
 
 class StudentInvoiceSerializer(serializers.ModelSerializer):
+    semester_str = serializers.SerializerMethodField()
+    student_str = serializers.SerializerMethodField()
+
     class Meta:
         model = m.StudentInvoice
         fields = "__all__"
 
+    def get_semester_str(self, obj):
+        return obj.semester.registration_start_date if obj.semester else None
+    def get_student_str(self, obj):
+        return (obj.student.person.first_name + " " + obj.student.person.last_name)  if obj.student else None
+
 
 class StudentPaymentSerializer(serializers.ModelSerializer):
+    semester_str = serializers.SerializerMethodField()
+    student_str = serializers.SerializerMethodField()
+    invoice_str = serializers.SerializerMethodField()
+
     class Meta:
         model = m.StudentPayment
         fields = "__all__"
+
+    def get_semester_str(self, obj):
+        return obj.semester.registration_start_date if obj.semester else None
+    def get_student_str(self, obj):
+        return (obj.student.person.first_name + " " + obj.student.person.last_name) if obj.student else None
+    def get_invoice_str(self, obj):
+        return obj.invoice.description if obj.invoice else None
 
 
 class AnnouncementTextSerializer(serializers.ModelSerializer):

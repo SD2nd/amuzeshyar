@@ -6,10 +6,31 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = m.Person
         fields = "__all__"
+
+
 class FixedTuitionForm(forms.ModelForm):
     class Meta:
         model = m.FixedTuitionFee
         fields = "__all__"
+
+
+class CourseTuitionForm(forms.ModelForm):
+    class Meta:
+        model = m.SemesterCourseTuition
+        fields = "__all__"
+
+
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = m.StudentInvoice
+        fields = "__all__"
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = m.StudentPayment
+        fields = "__all__"
+
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = m.Announcement

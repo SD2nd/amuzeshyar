@@ -16,17 +16,17 @@ class FixedTuitionAdmin(admin.ModelAdmin):
     search_fields = ("field_of_study",)
 
 
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ("datetime", "semester", "is_succeeded", "invoice", "student")
+    list_filter = ("datetime", )
+    search_fields = ("student", "datetime", "invoice",)
+
+
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ("id", "description", "creation_date", "is_payed", "indebtedness", "semester_id", "student_id")
     list_filter = ("creation_date", "description")
     search_fields = ("creation_date", "student_id")
 
-
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ("id", "description", "datetime", "amount", "payment_gateway", "is_succeeded", "invoice_id",
-                    "student_id", "semester_id")
-    list_filter = ("datetime", "description")
-    search_fields = ("datetime", "student_id", "invoice_id")
 
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ("announcement", "specific_major", "specific_specialization", "specific_student", "create_datetime",
@@ -94,7 +94,7 @@ admin.site.register(m.ClassAttendance, ClassAttendanceAdmin)
 admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice, InvoiceAdmin)
 admin.site.register(m.ClassSchedule)
-admin.site.register(m.StudentPayment)
+admin.site.register(m.StudentPayment, PaymentAdmin)
 
 
 

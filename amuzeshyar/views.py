@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm,AnnouncementForm
-from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building, Student
+from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm, BuildingForm,AnnouncementForm, CourseTuitionForm, PaymentForm, InvoiceForm
+from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room, Building, Student, SemesterCourseTuition, StudentPayment, StudentInvoice
 
 # Create your views here.
 
@@ -19,12 +19,57 @@ def fixed_tuition_form(request):
     return render(request, "fixed_tuition_form.html", {"form":form})
 
 def fixed_tuition_edit_form(request,id):
-    tuition = get_object_or_404(FixedTuitionFee, id = id )
+    tuition = get_object_or_404(FixedTuitionFee, id=id)
     form = FixedTuitionForm(request.POST or None, instance=tuition)
     if form.is_valid():
         form.save()
         return HttpResponse("SUCCESS")
     return render(request, "fixed_tuition_form.html", {"form":form})
+
+def course_tuition_form(request):
+    form = CourseTuitionForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "course_tuition_form.html", {"form":form})
+
+def course_tuition_edit_form(request,id):
+    tuition = get_object_or_404(SemesterCourseTuition, id=id)
+    form = CourseTuitionForm(request.POST or None, instance=tuition)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "course_tuition_form.html", {"form":form})
+
+def invoice_form(request):
+    form = InvoiceForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "invoice_form.html", {"form":form})
+
+def invoice_edit_form(request,id):
+    invoice = get_object_or_404(StudentInvoice, id=id)
+    form = InvoiceForm(request.POST or None, instance=invoice)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "invoice_form.html", {"form":form})
+
+def payment_form(request):
+    form = PaymentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "payment_form.html", {"form":form})
+
+def payment_edit_form(request,id):
+    payment = get_object_or_404(StudentPayment, id=id)
+    form = PaymentForm(request.POST or None, instance=payment)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "payment_form.html", {"form":form})
 
 def announcement_form(request):
     form = AnnouncementForm(request.POST or None)
