@@ -55,8 +55,8 @@ urlpatterns = [
     path('api/v1/rooms/<str:code>', a.Room_List_detail),
 
     # Department
-    path('api/v1/departments/', a.DepartmentList.as_view()),
-    path('api/v1/departments/<int:pk>', a.DepartmentDetail.as_view()),
+    path('api/v1/departments/', a.Department_list.as_view()),
+    path('api/v1/departments/<int:id>', a.Department_List_detail),
 
     # FixedTuitionFee
     path('api/v1/fixedfees/', a.FixedTuitionFee_List),

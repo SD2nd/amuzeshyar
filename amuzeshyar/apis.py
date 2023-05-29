@@ -486,16 +486,61 @@ def Room_List_detail(request, code):
         room.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@extend_schema(tags=["Department"])
-class DepartmentList(ListCreateAPIView):
-    queryset = m.Department.objects.all()
-    serializer_class = s.DepartmentSerializer
+@extend_schema(tags="Department")
+class Department_list(APIView):
+    @extend_schema(
+        request=s.DepartmentSerializer,
+        responses={
+            200: s.DepartmentSerializer
+        }
+    )
+    def get(self, request):
+        qs = m.Department.objects.all()
+        serialized = s.DepartmentSerializer(qs, many=True)
+        return Response(serialized.data, 200)
 
+    @extend_schema(
+        request=s.DepartmentSerializer,
+        responses={
+            201: s.DepartmentSerializer
+        }
+    )
+    def post(self, request):
+        serializer = s.DepartmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@extend_schema(tags=["Department"])
-class DepartmentDetail(RetrieveUpdateDestroyAPIView):
-    queryset = m.Department.objects.all()
-    serializer_class = s.DepartmentSerializer
+@extend_schema(
+    request=s.DepartmentSerializer,
+    responses={
+        status.HTTP_200_OK: s.DepartmentSerializer,
+    },
+    tags=["Department"])
+@api_view(['GET', 'PUT', 'DELETE'])
+def Department_List_detail(request, id):
+
+    try:
+        department = m.Department.objects.get(pk=id)
+    except m.Department.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = s.DepartmentSerializer(department)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = s.DepartmentSerializer(department, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        department.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(tags=["ConstValue"])

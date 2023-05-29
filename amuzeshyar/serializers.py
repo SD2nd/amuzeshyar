@@ -145,12 +145,16 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     building_title = serializers.SerializerMethodField()
+    room_title = serializers.SerializerMethodField()
     class Meta:
         model = m.Room
         fields = "__all__"
 
     def get_building_title (self, obj):
         return obj.building.title
+    
+    def get_room_title (self, obj):
+        return obj.room_type.title
 class BuildingSerializer(serializers.ModelSerializer):
     building_type_title = serializers.SerializerMethodField()
     class Meta: 
@@ -160,6 +164,8 @@ class BuildingSerializer(serializers.ModelSerializer):
     
     def get_building_type_title (self, obj):
         return obj.building_type.title
+    
+    
     
 
     
