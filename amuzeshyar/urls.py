@@ -40,11 +40,16 @@ urlpatterns = [
     path('api/v1/studentClass/<int:id>', a.StudentClass_List_detail),
 
     # Course
-    path('api/v1/Course/', a.Course_list.as_view(),
+    path('api/v1/courses/', a.Course_list.as_view(),
          name="get_class_attenndanceList"),
      
-     path('api/v1/Course/<int:pk>', a.CourseDetail.as_view(),
+     path('api/v1/courses/<int:pk>', a.CourseDetail.as_view(),
          name="get_class_attenndanceList"), 
+     
+     path('api/v1/coursepreqs/', a.CourseReq.as_view(),
+         ), 
+    path('api/v1/coursepreqs/<int:pk>', a.CourseReqDetail.as_view(),
+         ), 
 
     # Building
     path('api/v1/buildings/', a.Building.as_view()),
@@ -119,6 +124,8 @@ urlpatterns += [
     path('forms/fixedfees', v.fixed_tuition_form),
     path('forms/coursetuitions/<int:id>', v.course_tuition_edit_form),
     path('forms/coursetuitions', v.course_tuition_form),
+    path('forms/course', v.course_form),
+    path('forms/course/<int:id>', v.course_edit_form),
     path('forms/invoices/<int:id>', v.invoice_edit_form),
     path('forms/invoices', v.invoice_form),
     path('forms/payments/<int:id>', v.payment_edit_form),

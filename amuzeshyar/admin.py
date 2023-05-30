@@ -75,6 +75,9 @@ class SemesterCourseTuitionAdmin(admin.ModelAdmin):
 class ClassAttendanceAdmin(admin.ModelAdmin):
     list_display = ("session_number","session","student")
 
+class CoursePreReqAdmin(admin.ModelAdmin):
+    list_display = ("c1", "is_prerequisite","is_concurrent","c2")
+    
 admin.site.register(m.FixedTuitionFee, FixedTuitionAdmin)
 admin.site.register(m.Person, PersonAdmin)
 admin.site.register(m.Student, StudentAdmin)
@@ -95,6 +98,7 @@ admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice, InvoiceAdmin)
 admin.site.register(m.ClassSchedule)
 admin.site.register(m.StudentPayment, PaymentAdmin)
+admin.site.register(m.CoursePrerequisite, CoursePreReqAdmin)
 
 
 

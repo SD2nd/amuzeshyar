@@ -202,19 +202,23 @@ class Specialization(models.Model):
 
 
 class Course(models.Model):
-    title = title = models.CharField(max_length=CharFiledLength.long_title)
-    english_title = models.CharField(max_length=CharFiledLength.long_title)
+    title = title = models.CharField(max_length=CharFiledLength.long_title, verbose_name="عنوان")
+    english_title = models.CharField(max_length=CharFiledLength.long_title, verbose_name="عنوان لاتین")
     units_type = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_units_type")
-    theory_units = models.PositiveSmallIntegerField(default=0)
-    practical_units = models.PositiveSmallIntegerField(default=0)
+        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_units_type", verbose_name="نوع واحد")
+    theory_units = models.PositiveSmallIntegerField(default=0,  verbose_name="تعداد واحد نظری")
+    practical_units = models.PositiveSmallIntegerField(default=0,  verbose_name="تعداد واحد عملی")
     course_type = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_course_type")
+        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_course_type",  verbose_name="نوع درس")
     degree_level = models.ForeignKey(
-        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_degree_level")
+        ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_degree_level",  verbose_name="مقطع تحصیلی")
     specialization = models.ForeignKey(
-        Specialization, on_delete=models.SET_NULL, null=True)
-
+        Specialization, on_delete=models.SET_NULL, null=True,  verbose_name="گرایش درس")
+    
+    class Meta:
+        verbose_name = "درس"
+        verbose_name_plural = "درس ها"
+        
     def __str__(self) -> str:
         return self.title
 
@@ -413,8 +417,14 @@ class StudentPayment(models.Model):
 
 class CoursePrerequisite(models.Model):
     c1 = models.ForeignKey(Course, on_delete=models.CASCADE,
-                           related_name="CoursePrerequisite_c1")
-    is_prerequisite = models.BooleanField(default=False)
-    is_concurrent = models.BooleanField(default=False)
+                           related_name="CoursePrerequisite_c1",
+                           verbose_name="درس1")
+    is_prerequisite = models.BooleanField(default=False, verbose_name="پیشنیاز")
+    is_concurrent = models.BooleanField(default=False, verbose_name="همنیاز")
     c2 = models.ForeignKey(Course, on_delete=models.CASCADE,
-                           related_name="CoursePrerequisite_c2")
+                           related_name="CoursePrerequisite_c2", 
+                           verbose_name="درس2")
+    
+    class Meta:
+        verbose_name = "نیازمندی  درس"
+        verbose_name_plural = "نیازمندی های درس"

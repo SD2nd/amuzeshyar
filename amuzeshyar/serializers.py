@@ -123,25 +123,54 @@ class StudentClassSerializer(serializers.ModelSerializer):
         return obj.session.course.title  if obj.session else None
 
 class CourseSerializer(serializers.ModelSerializer): 
-    # course_type_title = serializers.SerializerMethodField()
-    # degree_level_title = serializers.SerializerMethodField()
-    # specialization = serializers.SerializerMethodField()
+    course_type_title = serializers.SerializerMethodField()
+    units_type_title = serializers.SerializerMethodField()
+    degree_level_title = serializers.SerializerMethodField()
+    specialization_title = serializers.SerializerMethodField()
+    courses_that_need_this = serializers.SerializerMethodField()
+    course_prerequisite = serializers.SerializerMethodField()
+    
     
     class Meta:
         model = m.Course
         fields = "__all__" 
-        # extra_fields = ["course_type_title","degree_level_title"] 
-        #depth = 1
+        
                 
-        # def get_course_type_title (self, obj):
-        #      return obj.course_type.title
+    def get_course_type_title (self, obj):
+            return obj.course_type.title
+
+    def get_degree_level_title (self, obj):
+        return obj.degree_level.title
+
+    def get_specialization_title(self, obj):
+        return obj.specialization.title
     
-        # def get_degree_level_title (self, obj):
-        #     return obj.degree_level.title
+    def get_units_type_title(self, obj):
+        return obj.units_type.title
+
+    def get_courses_that_need_this(self, obj):
+        course_qs = m.CoursePrerequisite.objects.filter(c1_id=obj.id)
+        return [x.c2.title for x in course_qs]
+
+    def get_course_prerequisite(self, obj):
+        course_qs = m.CoursePrerequisite.objects.filter(c2_id=obj.id)
+        return [x.c1.title for x in course_qs]
+        
+
+class CoursePrereq(serializers.ModelSerializer):
+    course1 = serializers.SerializerMethodField()
+    course2 = serializers.SerializerMethodField()
     
-        # def get_specialization(self, obj):
-        #  return obj.specialization.title
-# 
+    
+    class Meta: 
+        model = m.CoursePrerequisite
+        fields = "__all__"
+
+    def get_course1 (self, obj):
+        return obj.c1.title
+    
+    def get_course2 (self, obj):
+        return obj.c2.title
 
 class RoomSerializer(serializers.ModelSerializer):
     building_title = serializers.SerializerMethodField()
@@ -350,7 +379,7 @@ class FirstPageInformationSerializer(serializers.Serializer):
     classes_schedule = serializers.SerializerMethodField()
     
     def get_units_passed(self, obj):
-        units = 0
+        units = 0   
         passed_units_qs = m.StudentClass.objects.filter(grade__gte=10).filter(student_id = obj.id)
         if not passed_units_qs.exists():
             raise Exception("There is no StudentClass record")
@@ -392,7 +421,7 @@ class FirstPageInformationSerializer(serializers.Serializer):
         current_term = self.context.get("current_term")
         student_all_pays = m.StudentPayment.objects.filter(student_id = obj.id)
         if not student_all_pays.exists():
-            return "No payment record found for student"
+            raise Exception("No payment record found for student") 
         current_term_student_payments = []
         for record in student_all_pays:
             if record.semester.semester_code == current_term:
@@ -405,7 +434,7 @@ class FirstPageInformationSerializer(serializers.Serializer):
     def calc_all_term_payed_fee(self, obj):
         student_all_pays = m.StudentPayment.objects.filter(student_id = obj.id)
         if not student_all_pays.exists():
-            return "No payment record found for student"
+            raise Exception("No payment record found for student") 
         all_term_student_payed_amount = 0       
         for record in student_all_pays:
             all_term_student_payed_amount += record.amount
@@ -468,20 +497,26 @@ class FirstPageInformationSerializer(serializers.Serializer):
         }
         schedules = []
         counter = 0
-        for record in classes_qs:
-            counter += 1
-            class_sc =record.session.class_schedule_children.first() 
-            class_time = f"{class_sc.start_at}-{class_sc.end_at} {day_of_week[class_sc.day_of_week]}"
-            class_schedule = {
-                "row": counter,
-                "class_name": record.session.course.title,
-                "instructor": record.session.instructor.__str__(),
-                "time": class_time,
-                "exam_date": record.session.exam_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-                "location": record.session.class_schedule_children.first().location_id
-            }
-            schedules.append(class_schedule)
-        return schedules
+        try: 
+            for record in classes_qs:
+                counter += 1
+                class_sc = record.session.class_schedule_children.first() 
+                if not class_sc:
+                    raise Exception("Some classes do not have any class schedule !")
+                
+                class_time = f"{class_sc.start_at}-{class_sc.end_at} {day_of_week[class_sc.day_of_week]}"
+                class_schedule = {
+                    "row": counter,
+                    "class_name": record.session.course.title,
+                    "instructor": record.session.instructor.__str__(),
+                    "time": class_time,
+                    "exam_date": record.session.exam_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+                    "location": record.session.class_schedule_children.first().location_id
+                }
+                schedules.append(class_schedule)
+            return schedules
+        except Exception as e:
+            return None
 
     
     def to_representation(self, instance):

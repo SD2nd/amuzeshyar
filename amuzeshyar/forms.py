@@ -83,3 +83,8 @@ class BuildingForm(forms.ModelForm):
     class Meta:
         model = m.Building
         fields = "__all__"
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = m.Course
+        fields = "__all__"

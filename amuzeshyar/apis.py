@@ -986,3 +986,10 @@ def first_page(request, student_id):
     serialized_data = s.FirstPageInformationSerializer(qs, context={"current_term":request.query_params.get("term")})
     return Response(serialized_data.data, status.HTTP_200_OK)
     
+class CourseReq(ListCreateAPIView):
+    queryset = m.CoursePrerequisite.objects.all()
+    serializer_class = s.CoursePrereq
+
+class CourseReqDetail(RetrieveUpdateDestroyAPIView):
+    queryset = m.CoursePrerequisite.objects.all()
+    serializer_class = s.CoursePrereq

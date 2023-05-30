@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .forms import PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm,SemesterForm,ClassForm,ClassScheduleForm, BuildingForm,AnnouncementForm, CourseTuitionForm, PaymentForm, InvoiceForm
-from .models import Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room,Semester,Class,ClassSchedule, Building, Student, SemesterCourseTuition, StudentPayment, StudentInvoice
+from .forms import CourseForm, PersonForm, FixedTuitionForm, StudentClassForm, ClassAttendanceForm, DepartmentForm, RoomForm,SemesterForm,ClassForm,ClassScheduleForm, BuildingForm,AnnouncementForm, CourseTuitionForm, PaymentForm, InvoiceForm
+from .models import Course,Person, FixedTuitionFee, StudentClass, ClassAttendance, Department, Room,Semester,Class,ClassSchedule, Building, Student, SemesterCourseTuition, StudentPayment, StudentInvoice
 
 # Create your views here.
 
@@ -176,6 +176,21 @@ def department_edit_form(request,id):
         form.save()
         return HttpResponse("SUCCESS")
     return render(request, "departmnet_edit_form.html", {"form":form})
+
+def course_form(request):
+    form = CourseForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "course_form.html", {"form":form})
+
+def course_edit_form(request,id):
+    course = get_object_or_404(Course, id = id )
+    form = CourseForm(request.POST or None, instance=course)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("SUCCESS")
+    return render(request, "course_form.html", {"form":form})
 
 def room_form(request):
     form = RoomForm(request.POST or None)
