@@ -213,7 +213,7 @@ class Course(models.Model):
     degree_level = models.ForeignKey(
         ConstValue, on_delete=models.SET_NULL, null=True, related_name="Course_degree_level")
     specialization = models.ForeignKey(
-        Specialization, on_delete=models.SET_NULL, null=True, blank=True)
+        Specialization, on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.title
