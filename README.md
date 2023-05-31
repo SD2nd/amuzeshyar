@@ -2,6 +2,9 @@
 
 <div dir=”rtl”>
   
+ ![login](https://raw.githubusercontent.com/SD2nd/amuzeshyar/ee59114a79b6630f52e3c1f3fa791a5098def404/docs/Screenshot%202023-05-31%20at%2017-48-42%20%D9%88%D8%B1%D9%88%D8%AF%20%D9%85%D8%AF%DB%8C%D8%B1%DB%8C%D8%AA%20%D8%AF%D8%A7%D9%86%D8%B4%D8%AC%D9%88.png)
+  ![panel](https://raw.githubusercontent.com/SD2nd/amuzeshyar/ee59114a79b6630f52e3c1f3fa791a5098def404/docs/Screenshot%202023-05-31%20at%2017-48-55%20home%20page.png)
+  
 #  آپدیت 2 خرداد - اضافه شدن قالب مستندات API و Serializer
   
   با توجه به موارد شرح داده شده در کلاس، فایل قالب مستندات API و Serialzier در درایو مشترک قابل دسترسی است، پس از اتمام فرایند مستندسازی کار های خود، فایل را برای خانم المیرا نیازی ارسال کنید.
