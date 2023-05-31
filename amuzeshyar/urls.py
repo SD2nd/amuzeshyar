@@ -148,7 +148,7 @@ urlpatterns += [
     path('forms/building/<int:id>', v.building_edit_form),
     path('forms/announcement/<int:id>', v.announcement_edit_form),
     path('forms/announcement', v.announcement_form),
-    path("login", v.login_form)
+    path("login", v.login_form, name= "login")
 
     
 ]

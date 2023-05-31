@@ -124,8 +124,8 @@ def home(request, student_id):
             "classes_schedule":data["classes_schedule"],
         }
         return render(request,'home.html', context=context)
-    else: 
-        return HttpResponse(f"{req.text}")
+    elif req.status_code == 401:
+        return redirect("amuzeshyar:login")
 
 def student_class_form(request):
     form = StudentClassForm(request.POST or None)
