@@ -3,7 +3,7 @@
 <div dir=”rtl”>
   
  ![login](https://raw.githubusercontent.com/SD2nd/amuzeshyar/ee59114a79b6630f52e3c1f3fa791a5098def404/docs/Screenshot%202023-05-31%20at%2017-48-42%20%D9%88%D8%B1%D9%88%D8%AF%20%D9%85%D8%AF%DB%8C%D8%B1%DB%8C%D8%AA%20%D8%AF%D8%A7%D9%86%D8%B4%D8%AC%D9%88.png)
-  ![panel](https://github.com/SD2nd/amuzeshyar/blob/dev/docs/Screenshot%202023-06-02%20at%2022-25-43%20%D9%BE%D9%86%D9%84%20%D8%AF%D8%A7%D9%86%D8%B4%D8%AC%D9%88.png?raw=true)
+  ![panel](https://github.com/SD2nd/amuzeshyar/blob/dev/docs/Screenshot%202023-06-02%20at%2023-35-14%20%D9%BE%D9%86%D9%84%20%D8%AF%D8%A7%D9%86%D8%B4%D8%AC%D9%88.png?raw=true)
   
 #  آپدیت 2 خرداد - اضافه شدن قالب مستندات API و Serializer
   
