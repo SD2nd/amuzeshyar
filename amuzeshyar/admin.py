@@ -36,9 +36,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 
 class SemesterAdmin(admin.ModelAdmin):
-    list_display = ("semester_type", "registration_start_date", "year" )
+    list_display = ("semester_code","semester_type", "registration_start_date", "year" )
     list_filter = ("year",)
-
+    search_fields = ["year"]
 
 class SpecializationAdmin(admin.ModelAdmin):
     list_display = ("title","english_title","major")
@@ -55,7 +55,10 @@ class ProfessorAdmin(admin.ModelAdmin):
 
 
 class ClassAdmin(admin.ModelAdmin):
-    list_display = ("course","instructor","semester")
+    list_display = ("course","instructor","semester" ,"capacity")
+
+class ClassscheduelAdmin(admin.ModelAdmin):
+    list_display = ("session","روزهای_هفته","location")
 
 
 class StudentClassAdmin(admin.ModelAdmin):
@@ -96,7 +99,7 @@ admin.site.register(m.SemesterCourseTuition, SemesterCourseTuitionAdmin)
 admin.site.register(m.ClassAttendance, ClassAttendanceAdmin)
 admin.site.register(m.StudentClass, StudentClassAdmin)
 admin.site.register(m.StudentInvoice, InvoiceAdmin)
-admin.site.register(m.ClassSchedule)
+admin.site.register(m.ClassSchedule,ClassscheduelAdmin)
 admin.site.register(m.StudentPayment, PaymentAdmin)
 admin.site.register(m.CoursePrerequisite, CoursePreReqAdmin)
 

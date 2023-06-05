@@ -362,6 +362,10 @@ class ClassSchedule(models.Model):
     end_at = models.TimeField(verbose_name = "زمان پایان")
     location = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True,
         verbose_name = "مکان")
+    
+    def روزهای_هفته(self): 
+        return f"شنبه" if self.day_of_week==1 else f"یکشنبه" if self.day_of_week==2 else f"دوشنبه" if self.day_of_week==3 else f"سه شنبه" if self.day_of_week==4 else f"چهارشنبه" if self.day_of_week==5 else f"پنجشنبه" if self.day_of_week==6 else f"جمعه" if self.day_of_week==7 else None
+                    
 
     def __str__(self) -> str:
         return f"{self.session.__str__()} \
