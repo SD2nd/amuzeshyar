@@ -791,31 +791,58 @@ def AnnouncementText_Detail(request, id):
         ann.delete()
         return Response(204)
 
+
 @extend_schema(tags=["Semester"])
-class Semester(APIView):
-    def get(self, request, id):
-        qs = m.Semester.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.SemesterSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+class SemesterList(APIView):
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای عمومی و بدون نیاز به شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.SemesterResponseSerializer
+        },
 
+    )
+    def get(self, request):
+        Semesters_qs = m.Semester.objects.all()
+        serialized_data = s.SemesterResponseSerializer(
+            Semesters_qs, many=True).data
+        return Response(serialized_data, status.HTTP_200_OK)
+
+    @extend_schema(
+        request=s.SemesterRequestSerializer,
+        responses={
+            201: s.SemesterRequestSerializer
+        },
+    )
     def post(self, request):
-        payload = request.data
-        if payload:
-            Serialized = s.SemesterSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, status=status.HTTP_201_CREATED)
-            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"msg": "Payload Required"}, 400)
+        data = request.data
+        if data:
+            serialized = s.SemesterRequestSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
-    @api_view(['GET'])
-    def Semester_List_detail(request):
-        qs = m.Semester.objects.all()
-        serialized = s.SemesterSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-    
+
+@extend_schema(tags=["Semester"])
+class SemesterDetail(APIView):
+
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای مبتنی بر شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.SemesterResponseSerializer,
+        }
+    )
+    def get(self, request, id):
+        try:
+            queryset = m.Semester.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = s.SemesterResponseSerializer(queryset)
+        return Response(serialized.data, status.HTTP_200_OK)
+
     def delete(self, request, id):
         qs = m.Semester.objects.filter(id=id).first()
         if qs:
@@ -824,36 +851,65 @@ class Semester(APIView):
         return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):
-        pass
+        return Response(status=501)
 
     def patch(self, request, id):
-        pass
+        return Response(status=501)
+
+    def delete(self, request, id):
+        return Response(status=501)
 
 @extend_schema(tags=["Class"])
-class Class(APIView):
-    def get(self, request, id):
-        qs = m.Class.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.ClassSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+class ClassList(APIView):
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای عمومی و بدون نیاز به شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.ClassResponseSerializer
+        },
 
+    )
+    def get(self, request):
+        Classs_qs = m.Class.objects.all()
+        serialized_data = s.ClassResponseSerializer(
+            Classs_qs, many=True).data
+        return Response(serialized_data, status.HTTP_200_OK)
+
+    @extend_schema(
+        request=s.ClassRequestSerializer,
+        responses={
+            201: s.ClassRequestSerializer
+        },
+    )
     def post(self, request):
-        payload = request.data
-        if payload:
-            Serialized = s.ClassSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, status=status.HTTP_201_CREATED)
-            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"msg": "Payload Required"}, 400)
+        data = request.data
+        if data:
+            serialized = s.ClassRequestSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
-    @api_view(['GET'])
-    def Class_List_detail(request):
-        qs = m.Class.objects.all()
-        serialized = s.ClassSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-    
+
+@extend_schema(tags=["Class"])
+class ClassDetail(APIView):
+
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای مبتنی بر شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.ClassResponseSerializer,
+        }
+    )
+    def get(self, request, id):
+        try:
+            queryset = m.Class.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = s.ClassResponseSerializer(queryset)
+        return Response(serialized.data, status.HTTP_200_OK)
+
     def delete(self, request, id):
         qs = m.Class.objects.filter(id=id).first()
         if qs:
@@ -862,37 +918,66 @@ class Class(APIView):
         return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):
-        pass
+        return Response(status=501)
 
     def patch(self, request, id):
-        pass
+        return Response(status=501)
+
+    def delete(self, request, id):
+        return Response(status=501)
 
 
 @extend_schema(tags=["ClassSchedule"])
-class ClassSchedule(APIView):
-    def get(self, request, id):
-        qs = m.ClassSchedule.objects.filter(id=id).first()
-        if qs:
-            SerializedData = s.ClassScheduleSerializer(qs).data
-            return Response(SerializedData, status=status.HTTP_200_OK)
-        return Response({"msg": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+class ClassScheduleList(APIView):
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای عمومی و بدون نیاز به شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.ClassScheduleResponseSerializer
+        },
 
+    )
+    def get(self, request):
+        ClassSchedules_qs = m.ClassSchedule.objects.all()
+        serialized_data = s.ClassScheduleResponseSerializer(
+            ClassSchedules_qs, many=True).data
+        return Response(serialized_data, status.HTTP_200_OK)
+
+    @extend_schema(
+        request=s.ClassScheduleRequestSerializer,
+        responses={
+            201: s.ClassScheduleRequestSerializer
+        },
+    )
     def post(self, request):
-        payload = request.data
-        if payload:
-            Serialized = s.ClassScheduleSerializer(data=payload)
-            if Serialized.is_valid():
-                Serialized.save()
-                return Response(Serialized.data, status=status.HTTP_201_CREATED)
-            return Response(Serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"msg": "Payload Required"}, 400)
+        data = request.data
+        if data:
+            serialized = s.ClassScheduleRequestSerializer(data=data)
+            if serialized.is_valid():
+                serialized.save()
+                return Response(serialized.data, status.HTTP_201_CREATED)
+            return Response({"error": "data is invalid", 'details': serialized.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "empty payload"}, status.HTTP_400_BAD_REQUEST)
 
-    @api_view(['GET'])
-    def ClassSchedule_List_detail(request):
-        qs = m.ClassSchedule.objects.all()
-        serialized = s.ClassScheduleSerializer(qs, many=True)
-        return Response(serialized.data, 200)
-    
+
+@extend_schema(tags=["ClassSchedule"])
+class ClassScheduleDetail(APIView):
+
+    @extend_schema(
+        summary="این کلاس برای پیاده سازی سرویسهای مبتنی بر شناسه پیاده سازی شده است.",
+        request=None,
+        responses={
+            200: s.ClassScheduleResponseSerializer,
+        }
+    )
+    def get(self, request, id):
+        try:
+            queryset = m.ClassSchedule.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return Response({"msg": "object not found"}, status=status.HTTP_404_NOT_FOUND)
+        serialized = s.ClassScheduleResponseSerializer(queryset)
+        return Response(serialized.data, status.HTTP_200_OK)
+
     def delete(self, request, id):
         qs = m.ClassSchedule.objects.filter(id=id).first()
         if qs:
@@ -901,10 +986,15 @@ class ClassSchedule(APIView):
         return Response({"msg": "not found"}, status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):
-        pass
+        return Response(status=501)
 
     def patch(self, request, id):
-        pass
+        return Response(status=501)
+
+    def delete(self, request, id):
+        return Response(status=501)
+
+
 
 class Specialization(APIView):
     def post(self, request):

@@ -93,18 +93,17 @@ urlpatterns = [
     path('api/v1/anntext/<int:id>', a.AnnouncementText_Detail),
 
     # Semester
-    path('api/v1/semester', a.Semester.Semester_List_detail),
-    path('api/v1/semester/', a.Semester.as_view()),
-    path('api/v1/semester/<int:id>', a.Semester.as_view()),
+    path('api/v1/semesters/', a.SemesterList.as_view(),name="create_list_all_semester"),
+    path('api/v1/semesters/<int:id>',a.SemesterDetail.as_view(), name="get_edit_delete_semester"),
 
      # class
-    path('api/v1/class', a.Class.Class_List_detail),
-    path('api/v1/class/', a.Class.as_view()),
-    path('api/v1/class/<int:id>', a.Class.as_view()),
+    path('api/v1/classes/', a.ClassList.as_view(),name="create_list_all_class"),
+    path('api/v1/classes/<int:id>',a.ClassDetail.as_view(), name="get_edit_delete_class"),
+
     # Semesterclassschedule
-    path('api/v1/classSchedule', a.ClassSchedule.ClassSchedule_List_detail),
-    path('api/v1/classSchedule/', a.ClassSchedule.as_view()),
-    path('api/v1/classSchedule/<int:id>', a.ClassSchedule.as_view()),
+    path('api/v1/classSchedules/', a.ClassScheduleList.as_view(),name="create_list_all_classSchedule"),
+    path('api/v1/classSchedules/<int:id>',a.ClassScheduleDetail.as_view(), name="get_edit_delete_classSchedule"),
+
     
     path('api/v1/panel/<int:student_id>',a.first_page ),
 

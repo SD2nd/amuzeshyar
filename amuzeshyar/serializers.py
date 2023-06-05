@@ -308,15 +308,21 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
 
 
-class SemesterSerializer(serializers.ModelSerializer): 
+
+class SemesterResponseSerializer(serializers.ModelSerializer): 
     semester_type_title = serializers.SerializerMethodField()
     def get_semester_type_title(self, obj):
        return obj.semester_type.title if obj.semester_type else None
     class Meta:
         model = m.Semester
         fields = "__all__"
-        
-class ClassSerializer(serializers.ModelSerializer):
+class SemesterRequestSerializer(serializers.ModelSerializer): 
+    class Meta:
+        model = m.Semester
+        fields = "__all__"
+
+
+class ClassResponseSerializer(serializers.ModelSerializer):
     course_title = serializers.SerializerMethodField()
     instructor_title = serializers.SerializerMethodField()
     semester_title = serializers.SerializerMethodField()
@@ -330,20 +336,34 @@ class ClassSerializer(serializers.ModelSerializer):
        return (obj.instructor.person.first_name + " " + obj.instructor.person.last_name) if obj.instructor else None
     def get_semester_title(self, obj):
        return f"{obj.semester.year} {obj.semester.semester_type.__str__()}" if obj.semester else None
-     
-class ClassScheduleSerializer(serializers.ModelSerializer):
+class ClassRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = m.Class
+        fields = "__all__"
+
+class ClassScheduleResponseSerializer(serializers.ModelSerializer):
     session_title = serializers.SerializerMethodField()
+    location_title= serializers.SerializerMethodField()
+    day_of_week_title=serializers.SerializerMethodField()
+
+
+    
     class Meta:
         model = m.ClassSchedule
         fields = "__all__"
     def get_session_title(self, obj):
        return f"{obj.session.__str__()}" if obj.session else None  
+    def get_location_title(self, obj):
+       return f"{obj.location.__str__()}" if obj.location else None
+    def get_day_of_week_title(self, obj): 
+        return f"شنبه" if obj.day_of_week==1 else f"یکشنبه" if obj.day_of_week==2 else f"دوشنبه" if obj.day_of_week==3 else f"سه شنبه" if obj.day_of_week==4 else f"چهارشنبه" if obj.day_of_week==5 else f"پنجشنبه" if obj.day_of_week==6 else f"جمعه" if obj.day_of_week==7 else None
+                            
 
-
-
-
-
-
+class ClassScheduleRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.ClassSchedule
+        fields = "__all__"
 
 
 
