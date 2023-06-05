@@ -521,18 +521,22 @@ class FirstPageInformationSerializer(serializers.Serializer):
             for record in classes_qs:
                 counter += 1
                 class_sc = record.session.class_schedule_children.first() 
-                if not class_sc:
-                    raise Exception("Some classes do not have any class schedule !")
-                
-                class_time = f"{class_sc.start_at}-{class_sc.end_at} {day_of_week[class_sc.day_of_week]}"
+                if class_sc:
+                    class_time = f"{class_sc.start_at}-{class_sc.end_at} {day_of_week[class_sc.day_of_week]}"
+                    location = record.session.class_schedule_children.first().location_id
+                else: 
+                    class_time ="این کلاس زمانبندی ندارد."
+                    location="مکان ندارد!"
+
                 class_schedule = {
                     "row": counter,
                     "class_name": record.session.course.title,
                     "instructor": record.session.instructor.__str__(),
                     "time": class_time,
                     "exam_date": record.session.exam_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-                    "location": record.session.class_schedule_children.first().location_id
+                    "location": location
                 }
+
                 schedules.append(class_schedule)
             return schedules
         except Exception as e:
